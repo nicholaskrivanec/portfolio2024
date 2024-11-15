@@ -1,0 +1,20 @@
+{
+  "name": "w3schools-node-vue-blank",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "vite build client --emptyOutDir",
+    "start": "vite build client --emptyOutDir && node server/index.js --emptyOutDir",
+    "dev": "nodemon server/index.js 2>&1 & vite dev client < /dev/null"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^3.1.7",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "vite": "^4.0.0"
+  }
+}
