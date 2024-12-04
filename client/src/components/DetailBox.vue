@@ -2,17 +2,17 @@
     <details class="container" @toggle="toggleCaret">
         <summary :class="{ 'bottom-summary': lastRow }">
             <h5 class="col-1 opacity">
-                <i class="fa-solid fa-caret-down" v-show="isOpen"></i>
-                <i class="fa-solid fa-caret-right" v-show="!isOpen"></i>
+                <fa-icon :icon="['fas', 'caret-down']" v-show="isOpen" class="fa-fw margin-right label-icon"/>
+                <fa-icon :icon="['fas', 'caret-right']" v-show="!isOpen" class="fa-fw margin-right label-icon"/>
                 <b> {{ title1 }}</b>
                 <img v-if="logoSrc" :src="logoSrc" class="dblogo" alt="logo" />
             </h5>
             <h6 class="col-2 text-teal">
-                <i class="fa-solid fa-calendar fa-fw margin-right label-icon"></i>{{ date }}
+                <fa-icon :icon="['fas', 'calendar-days']" class="fa-fw margin-right label-icon" />{{ date }}
             </h6>
         </summary>
         <h5 class="col-3 opacity"><b>{{ title2 }}</b></h5>
-        <p>{{ details }}</p>
+        <p><slot></slot></p>
         <hr v-if="!lastRow">
         <br v-if="lastRow">
     </details>
@@ -20,14 +20,12 @@
 
 <script>
 
-
 export default {
     name: 'DetailBox',
     props: {
         title1: { type: String, required: true },
         title2: { type: String, required: false },
         date: { type: String, required: false },
-        details: { type: String, required: false },
         lastRow: { type: Boolean, required: false, default: false },
         onOpen: { type: Function, default: null },
         onClose: { type: Function, default: null },
@@ -50,7 +48,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 
 summary {
     display: flex;
@@ -67,11 +65,14 @@ summary {
 }
 
 summary:hover,
+summary:hover i.fa-solid,
 summary:hover .text-teal,
 summary:hover .opacity {
     background-color: var(--hover-background);
     color: var(--hover-text);
     opacity: 1 !important;
+    user-select:none;
+    transition: 0.3s;
 }
 
 summary h5 {
@@ -94,11 +95,8 @@ summary h6 {
     cursor: pointer;
 }
 
-details[open]>summary.bottom-summary:after {
-    margin-bottom: 0;
+summary:hover svg.fa-fw{
+  color: var(--hover-text);
 }
 
-details:not([open])>summary.bottom-summary {
-    margin-bottom: 16px;
-}
 </style>

@@ -11,6 +11,9 @@
 <script>
 export default {
   name: 'ToggleSwitch',
+  // data(){
+  //   return {eventName: this.onChange}
+  // }
   props: {
     label: {
       type: String

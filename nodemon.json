@@ -12,7 +12,8 @@
     "./w3s-dynamic-storage/.env"
   ],
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "development",
+    "VITE_DEV": true
   },
   "ext": "js,json,env"
 }
