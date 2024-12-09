@@ -1,33 +1,28 @@
 <template>
     <footer class="container">
       <p>Find me on social media.</p>
-      <span class="foot_icon">
-        <a href="https://www.linkedin.com/in/nkrivanec" title="www.linkedin.com/in/nkrivanec" target="_blank">
-          <fa-icon :icon="['fab', 'linkedin']" class="fa-lg footer-link" title="LinkedIn" />
-        </a>
-      </span>
-      <span class="foot_icon">
-        <a href="https://github.com/nicholaskrivanec" title="www.github.com/nicholaskrivanec" target="_blank">
-          <fa-icon :icon="['fab', 'github']" class="fa-lg footer-link" title="GitHub" />
-        </a>
-      </span>
-      <span class="foot_icon">
-        <a href="https://www.facebook.com/nickkrivanec" title="www.facebook.com/nickkrivanec" target="_blank">
-          <fa-icon :icon="['fab', 'facebook']" class="fa-lg footer-link" title="Facebook" />
-        </a>
-      </span>
-      <span class="foot_icon">
-        <a href="https://www.instagram.com/nickkrivanec" title="www.instagram.com/nickkrivanec" target="_blank">
-          <fa-icon :icon="['fab', 'instagram']" class="fa-lg footer-link" title="Instagram" />
-        </a>
+      <span v-for="link in links" :key="link">
+        <span class="foot_icon" >
+          <a :href="link.url" :title="link.title" target="_blank">
+            <fa-icon :icon="['fab', link.icon]" class="fa-lg footer-link" :title="link.name" />
+          </a>
+        </span>
       </span>
     </footer>
 </template>
 
 <script>
-    export default {
-        name: 'FooterArea'
-    }
+  import { useUserStore} from '../stores/userStore';
+  export default {
+      name: 'FooterArea'
+      ,setup() {
+          const ds = useUserStore();
+          return {
+            links:ds.links,
+            data: ds.data
+          }
+      }
+  }
 </script>
 
 <style scoped>

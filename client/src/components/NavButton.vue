@@ -60,6 +60,6 @@ export default {
         color: var(--primary-text);
         display: block;
         line-height: 1px;
-        padding: 4px;
+        padding: 0px 4px;
     }
 </style>

@@ -9,8 +9,8 @@
 
       <div class="menu-togglers">
         <toggle-switch label="Dark Mode" id="dark-mode-toggle" :checked="isDarkMode" :onChange="toggleDarkMode" />
-        <toggle-switch label="Icons" id="icon-toggle" :checked="showIcons" :onChange="toggleIconMode" />
-        <!-- <toggle-switch label="Colors" id="color-toggle" :checked="showColors" :onChange="toggleColors" /> -->
+        <toggle-switch v-if="includeIconSwitch" label="Icons" id="icon-toggle" :checked="showIcons" :onChange="toggleIconMode" />
+        <toggle-switch v-if="includeColorSwitch" label="Colors" id="icon-toggle" :checked="showColors" :onChange="toggleColorMode" />
       </div>
     </div>
   </header>
@@ -21,10 +21,16 @@
     data(){
       return {
          isDarkMode: (localStorage.getItem("darkMode") ?? "enabled") === "enabled"
-         , showIcons: (localStorage.getItem("iconMode") ?? "enabled") === "enabled"
+         ,showIcons: (localStorage.getItem("iconMode") ?? "enabled") === "enabled"
+         ,showColors: (localStorage.getItem("colorMode") ?? "enabled") === "disabled"
+         
       }
     }
-    ,emits:['toggle-icons']
+    ,props:{
+      includeColorSwitch : { type: Boolean, required: false, default: false }
+      ,includeIconSwitch : { type: Boolean, required: false, default: false }
+    }
+    ,emits:['toggle-icons', 'toggle-colors']
     , methods: {
       toggleDarkMode() {
         this.isDarkMode = !this.isDarkMode;
@@ -32,13 +38,20 @@
         localStorage.setItem("darkMode", this.isDarkMode ? "enabled" : "disabled");
       }
       ,toggleIconMode(){
-        this.showIcons = !this.showIcons
+        this.showIcons = !this.showIcons;
         this.$emit("toggle-icons", this.showIcons);
+      }
+      ,toggleColorMode(){
+        this.showColors = !this.showColors;
+        this.$emit("toggle-colors", this.showColors);
       }
     }
     , mounted() {
-        if (this.isDarkMode)
-          document.body.classList.add("dark-mode");
+        document.body.classList.toggle("dark-mode", this.isDarkMode);
+        if(!this.includeColorSwitch) {
+          this.showColors = false;
+          localStorage.setItem("colorMode", "disabled");
+        }
     }
 
  }
@@ -72,8 +85,4 @@
         font-weight: bold;
         display: inline;
     }
-
-
-
-
 </style>   
