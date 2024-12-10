@@ -59,14 +59,16 @@ span.c-icon {
 }
 
 span.css-icon {
+    margin-top:-4px;
     height: calc( var(--icon-height) + 8px );
-    background-size: calc( var(--icon-size) - 2px );
+    background-size: calc( var(--icon-size) - 4px );
     background-image: url('data:image/svg+xml,<svg width="256" height="361" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><path d="M127.8 360 23.7 331.3.4 70.8h255.2L232.3 331l-104.5 29Z" fill="%23264DE4"/><path d="m212.4 314.5 19.9-222.4H128V338l84.4-23.5Z" fill="%232965F1"/><path d="m53.7 188.6 2.8 32H128v-32H53.7ZM48 124l2.8 32H128v-32H48Zm80 147.6h-.1L92.3 262 90 236.5H58l4.4 50.2 65.5 18.1h.1v-33.2Z" fill="%23EBEBEB"/><path d="M60.5 0h38.7v16.2H76.7v16.2h22.5v16.1H60.5V0Zm46.4 0h38.7v14H123v3h22.5v32.3h-38.7V34.5h22.5v-2.9H107V0Zm46.4 0H192v14h-22.5v3H192v32.3h-38.7V34.5h22.5v-2.9h-22.5V0Z"/><path d="M202.1 188.6 208 124h-80v32h45l-3 32.6h-42v32h39.3l-3.7 41.4-35.6 9.6v33.2l65.5-18.1.4-5.4 7.5-84 .8-8.7Z" fill="%23FFF"/></svg>');
 }
 
 span.html-icon {
+    margin-top:-4px;
     height: calc( var(--icon-height) + 8px );
-    background-size: calc( var(--icon-size) - 2px );
+    background-size: calc( var(--icon-size) - 4px );
     background-image: url('data:image/svg+xml,<svg width="256" height="361" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid"><path d="M255.6 70.8 232.3 331l-104.5 29-104.1-29L.4 70.9h255.2Z" fill="%23E44D26"/><path d="m128 338 84.4-23.5 19.9-222.4H128V338Z" fill="%23F16529"/><path d="M82.8 156H128v-32H48l.7 8.6 7.8 88H128v-32H85.7L82.8 156Zm7.2 80.5H58l4.4 50.2 65.5 18.1h.1v-33.2h-.1L92.3 262 90 236.5Z" fill="%23EBEBEB"/><path d="M24.2 0h16.2v16h14.9V0h16.2v48.6H55.3V32.3H40.4v16.3H24.2V0Zm68.6 16.1H78.5V0h44.9v16.1H109v32.5H92.8V16ZM130.5 0h16.9l10.4 17 10.4-17h17v48.6H169V24.5l-11.2 17.3h-.3l-11.2-17.3v24h-15.8V0Zm62.7 0h16.2v32.5h22.9v16h-39V0Z"/><path d="M127.9 220.6h39.3l-3.7 41.4-35.6 9.6v33.2l65.5-18.1.4-5.4 7.5-84 .8-8.7H128v32Zm0-64.7H205l.7-7.1 1.4-16.2.8-8.6h-80v31.9Z" fill="%23FFF"/></svg>');
 }
 

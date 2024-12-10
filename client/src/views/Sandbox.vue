@@ -1,71 +1,54 @@
 <template>
-  <menu-bar @toggle-colors="toggleColors"/>
-  <span v-if="showColors" ><nav-bar></nav-bar></span>
-  
-  <div class="fib-svg-container">
-    <ul class="inline-list">
-      <li v-for="(rect, index) in rectangles" :key="index">{{ rect.size }}</li>
-    </ul>
-    <svg :width="svgWidth" :height="svgHeight" xmlns="http://www.w3.org/2000/svg">
-      <rect
-        v-for="(rect, index) in rectangles"
-        :key="index"
-        :x="rect.x"
-        :y="rect.y"
-        :width="rect.size"
-        :height="rect.size"
-        :fill="rect.color"
-        :stroke="rect.borderColor"
-        :stroke-width="rect.borderWidth"
-        :class="{ animated: isAnimating }"
-        :style="{ animationDelay: `${index * animationDelay}ms`}">
-      </rect>
+  <div>
+    <span v-if="showColors"><nav-bar></nav-bar></span>
 
-      <path
-        v-if="spiralPath"
-        id="spiral"
-        :d="spiralPath"
-        fill="none"
-        stroke="black"
-        stroke-width="0.5"
-        :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }"
-        stroke-dasharray="0"
-        stroke-dashoffset="0"
-      />
-    </svg>
+    <div class="fib-svg-container">
+      <ul class="inline-list">
+        <li v-for="(rect, index) in rectangles" :key="index">{{ rect.size }}</li>
+      </ul>
+      <svg :width="svgWidth" :height="svgHeight" xmlns="http://www.w3.org/2000/svg">
+        <rect v-for="(rect, index) in rectangles" :key="index" :x="rect.x" :y="rect.y" :width="rect.size"
+          :height="rect.size" :fill="rect.color" :stroke="rect.borderColor" :stroke-width="rect.borderWidth"
+          :class="{ animated: isAnimating }" :style="{ animationDelay: `${index * animationDelay}ms` }">
+        </rect>
 
-    <button @click="drawFibonacciGoldenRatio">Draw Fibonacci Pattern</button>
+        <path v-if="spiralPath" id="spiral" :d="spiralPath" fill="none" stroke="black" stroke-width="0.5"
+          :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }" stroke-dasharray="0"
+          stroke-dashoffset="0" />
+      </svg>
+
+      <button @click="drawFibonacciGoldenRatio">Draw Fibonacci Pattern</button>
+    </div>
   </div>
 </template>
 
 <script>
-import { nextTick } from "vue";
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 
 export default {
   name: "Sandbox",
-  data() {
-    return {
-      svgWidth: window.innerWidth * 0.8, // 80% of window width
-      svgHeight: window.innerHeight * 0.8, // 80% of window height
-      rectangles: [], // Rectangles data
-      spiralPath: "", // Spiral path
-      isAnimating: false, // Rectangle animation state
-      isSpiralVisible: false, // Controls spiral visibility
-      animationDelay: 250, // Delay between rectangle animations in ms
-      showColors: localStorage.getItem("colorMode") === "enabled"
-    };
-  },
-  methods: {
-    toggleColors(data){
-      this.showColors = data;
+  setup(_, { emit }) {
+    const svgWidth = ref(window.innerWidth * 0.8);
+    const svgHeight = ref(window.innerHeight * 0.8);
+    const rectangles = ref([]);
+    const spiralPath = ref("");
+    const isAnimating = ref(false);
+    const isSpiralVisible = ref(false);
+    const animationDelay = ref(250);
+    const showColors = ref(localStorage.getItem("colorMode") === "enabled");
+
+    const toggleColors = (data) => {
+      showColors.value = data;
       localStorage.setItem("colorMode", data ? "enabled" : "disabled");
-    },
-    updateSVGSize() {
-      this.svgWidth = window.innerWidth * 0.8;
-      this.svgHeight = window.innerHeight * 0.8;
-    },
-    fibonacci(n) {
-      let [size, x, y] = [1, this.svgWidth * 0.3333, this.svgHeight * 0.6666];
+    };
+
+    const updateSVGSize = () => {
+      svgWidth.value = window.innerWidth * 0.8;
+      svgHeight.value = window.innerHeight * 0.8;
+    };
+
+    const fibonacci = (n) => {
+      let [size, x, y] = [1, svgWidth.value * 0.3333, svgHeight.value * 0.6666];
       let fibs = [{ size, x, y, cx: x + size / 2, cy: y + size / 2 }];
 
       for (let i = 1; i < n; i++) {
@@ -90,15 +73,16 @@ export default {
       }
 
       return fibs;
-    },
-    drawFibonacciGoldenRatio() {
-      this.isAnimating = false;
-      this.isSpiralVisible = false;
-      this.rectangles = [];
+    };
+
+    const drawFibonacciGoldenRatio = () => {
+      isAnimating.value = false;
+      isSpiralVisible.value = false;
+      rectangles.value = [];
 
       nextTick(() => {
-        const fibs = this.fibonacci(19);
-        this.rectangles = fibs.map((rect) => ({
+        const fibs = fibonacci(19);
+        rectangles.value = fibs.map((rect) => ({
           x: rect.x,
           y: rect.y,
           size: rect.size,
@@ -106,24 +90,23 @@ export default {
           borderWidth: 0.5,
           borderColor: "black",
         }));
-        this.spiralPath = this.generateSpiralPath(fibs);
-        this.isAnimating = true;
+        spiralPath.value = generateSpiralPath(fibs);
+        isAnimating.value = true;
 
-        // Wait for rectangle animations to complete before animating the spiral
-        const totalAnimationTime = this.rectangles.length * this.animationDelay + 500; // Add buffer
+        const totalAnimationTime = rectangles.value.length * animationDelay.value + 500;
         setTimeout(() => {
-          this.isSpiralVisible = true; // Show spiral
-          this.animateSpiral();
+          isSpiralVisible.value = true;
+          animateSpiral();
         }, totalAnimationTime);
       });
-    },
-    generateSpiralPath(fibSequence) {
+    };
+
+    const generateSpiralPath = (fibSequence) => {
       let path = "";
       fibSequence.forEach((sqr, index) => {
-
-        const radius = sqr.size; 
-        const largeArcFlag = 0; // Always use a small arc
-        let sweepFlag = 1; // Clockwise direction
+        const radius = sqr.size;
+        const largeArcFlag = 0;
+        const sweepFlag = 1;
 
         let startX, startY, endX, endY;
 
@@ -150,21 +133,40 @@ export default {
       });
 
       return path.trim();
-    },
-    animateSpiral() {
+    };
+
+    const animateSpiral = () => {
       const spiral = document.getElementById("spiral");
       const length = spiral.getTotalLength();
       spiral.style.strokeDasharray = length;
       spiral.style.strokeDashoffset = length;
       spiral.style.transition = "stroke-dashoffset 2s ease-in-out";
       spiral.style.strokeDashoffset = "0";
-    },
-  },
-  mounted() {
-    window.addEventListener("resize", this.updateSVGSize);
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.updateSVGSize);
+    };
+
+    onMounted(() => {
+      window.addEventListener("resize", updateSVGSize);
+      nextTick(() => {
+        emit('view-loaded', { data: { showColorSwitch: true } });
+      });
+    });
+
+    onBeforeUnmount(() => {
+      window.removeEventListener("resize", updateSVGSize);
+    });
+
+    return {
+      svgWidth,
+      svgHeight,
+      rectangles,
+      spiralPath,
+      isAnimating,
+      isSpiralVisible,
+      animationDelay,
+      showColors,
+      toggleColors,
+      drawFibonacciGoldenRatio,
+    };
   },
 };
 </script>

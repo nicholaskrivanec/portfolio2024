@@ -8,6 +8,9 @@ const pinia = createPinia();
 app.use(router);
 app.use(pinia);
 
+import Preloader from './components/Preloader.vue';
+app.component('preloader', Preloader);
+
 //Assets
 import './assets/main.css';
 import './assets/icons.css';
@@ -46,7 +49,7 @@ import {
     faPenToSquare       ,faUser         ,faEnvelope         ,faBriefcase
     ,faHome             ,faAsterisk     ,faCircleDown       ,faMugSaucer
     ,faGraduationCap    ,faCode         ,faCaretDown        ,faCaretRight
-    ,faCalendarDays     ,faTruckMonster ,faSpinner
+    ,faCalendarDays     ,faTruckMonster ,faSpinner          ,faLaptopCode
 } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faFacebook, faLinkedin, faGithub, faSquareXTwitter } from '@fortawesome/free-brands-svg-icons';
 library.add(
@@ -55,6 +58,7 @@ library.add(
     ,faGraduationCap    ,faCode         ,faCaretDown        ,faCaretRight
     ,faCalendarDays     ,faInstagram    ,faFacebook         ,faLinkedin
     ,faGithub           ,faTruckMonster ,faSpinner          ,faSquareXTwitter
+    ,faLaptopCode
 ); 
 app.component('fa-icon', FontAwesomeIcon);
 app.mount('#app');

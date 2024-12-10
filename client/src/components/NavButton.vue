@@ -2,12 +2,8 @@
     <div class="nav-btn">
         <router-link :to="path" class="nav-link">
             <div class="wrapper">
-                <div>
-                    <fa-icon :icon="['fas', icon]" />
-                </div>
-                <span>
-                    <p class="nav-lbl row-1"><slot>Home</slot></p>
-                </span>
+                <div><fa-icon :icon="['fas', icon]" /></div>
+                <span class="nav-lbl row-1"><slot>Home</slot></span>
             </div>
         </router-link>
     </div>
@@ -50,16 +46,19 @@ export default {
         font-size:9pt;
         display:block;
     }
-    .nav-link{
-        margin:0px;
-        line-height:1px;
-        text-align:center;
-        vertical-align: bottom;
-    }
+
     a.nav-link {
         color: var(--primary-text);
+        font-size: 14pt;
         display: block;
-        line-height: 1px;
+        line-height: 20px;
+        padding: 4px;
+        transition:0.3s;
+        margin:0px;
+        text-align:center;
+        color: var(--primary-text);
+        display: block;
         padding: 0px 4px;
-    }
+}
+
 </style>

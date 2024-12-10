@@ -216,23 +216,7 @@ img {
   text-align: center;
 }
 
-a.nav-link {
-  color: var(--primary-text);
-  font-weight: 700;
-  font-size: 14pt;
-  display: block;
-  line-height: 25px;
-  padding: 4px;
-  transition:0.3s;
-}
-a.nav-link:hover {
-  background-color: var(--nav-background-hover);
-  color: var(--nav-background-text-hover);
-  opacity: 1 !important;
-  transition:0.3s;
-  cursor:pointer;
-  user-select: none;
-}
+
 nav {
   width: 88px;
   position: fixed;
@@ -333,40 +317,4 @@ span.dl-text{
   visibility: hidden;
   opacity: 0;
 }
-.preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.spin {
-  height:50px;
-  width: 50px;
-  animation-name: spin;
-  animation-direction: normal;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-  animation-timing-function: steps(8);
-}
 
-.spin path {
-  fill: var(--preload-svg);
-}
-.spin path.path1{
-  opacity: 0.4;
-}
-.spin path.path2{
-  opacity: 1;
-}
-@keyframes spin{
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-      transform: rotate(1turn);
-  }
-}
