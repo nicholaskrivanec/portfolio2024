@@ -3,7 +3,7 @@
     <section class="third">
       <div class="card-2">
         <div class="display-container" ref="displayContainer">
-          <img class="profile-pic" @load="updateHeights" src="../assets/profile_pic.png" alt="Profile" width="100%" height="auto" />
+          <img class="profile-pic" @load="updateHeights" :src="profilePic" alt="Profile Picture" width="100%" height="auto" />
         </div>
         <div class="container" :style="{ height: thirdHeight }" ref="thirdSection">
           <h6 class="picture-title">{{ name }}</h6>
@@ -95,8 +95,23 @@
 
       <div class="container card">
         <h2 class="header-icon"><fa-icon :icon="['fas', 'fa-graduation-cap']" class="fa-fw" />Education</h2>
-        <detail-box title1="Weber State University" title2="" date="2015 - 2019" lastRow="true"
-          :onToggle="updateHeights" :logoSrc="wsuLogoPath">Associate of Science, Computer Science</detail-box>
+        <detail-box  date="2015 - 2019" lastRow="true"
+          :onToggle="updateHeights">
+          <template v-slot:title1>Weber State University
+            <svg class="wsulogo" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" width="40px" height="22px" viewBox="0 0 54.9 76.7"
+              xml:space="preserve">
+              <path fill="#4A0D66" d="M54.9,20.8V0H0v21c0,39.5,27.4,55.7,27.4,55.7l0,0c0,0,27.6-15.2,27.4-55.8V20.8z" />
+              <path fill="#FFFFFF" d="M39.6,17.4c-3.9-5.1-3.2-7.4-3.2-7.4s-2.1,3.7-3.1,6.8c-1.3,3.7,1.2,7.6,1.2,7.6l4.3,6.2
+                  c1.6,2.6-2.4,8.6-2.4,8.6l-8.8-20.5C23.9,10.2,26.1,7,26.1,7c-7.3,7.7-6.3,12.5-5.2,15.9c0,0,1.6,4,3.7,9.1l-2.8,7.4L16,25.9
+                  c-2-5.1,0.1-8.6,0.1-8.6c-9.2,8-5.8,16.2-4,20.4c3.9,9.5,6.5,15.5,7.1,17.1c0.1,0.4,0.2,0.6,0.2,0.6h1.7c0.1,0,0.3-0.1,0.4-0.2
+                  c0.1-0.1,0.7-2,0.7-2l4.6-15.6c3,7.5,6.8,16.7,7,17.3c0.1,0.3,0.2,0.5,0.2,0.5c0,0,1.7,0,1.7,0c0.1,0,0.2-0.1,0.3-0.2
+                  c0.1-0.2,0.7-2,0.7-2l6.8-19.5C46.9,25.1,42.7,21.5,39.6,17.4z" />
+            </svg>
+          </template>
+          <template v-slot>
+            Associate of Science, Computer Science
+          </template>
+        </detail-box>
       </div>
 
     </section>
@@ -105,24 +120,22 @@
 </template>
 
 <script>
-import wsuLogo from "../assets/wsu-logo.svg";
-import { ref, computed, onMounted, onUnmounted, nextTick, watch } from "vue";
+import { ref, computed, onMounted, onUnmounted, nextTick, watch, onActivated, onDeactivated } from "vue";
 import { storeToRefs } from "pinia";
-import { useUserStore } from "../stores/userStore"; // User-related store
 import { useLoadingStore } from "../stores/loading"; // Loading state store
+import { useUserStore } from "../stores/userStore"; // User-related store
+import { useEventStore } from "@/stores/eventStore";
 
 export default {
   name: "HomeView",
   setup(_, { emit }) {
-    const ds = useUserStore(); // Access user store instance
-    const loadingStore = useLoadingStore(); // Access loading store instance
-    const { isLoading } = storeToRefs(loadingStore); // Reactive `isLoading`
-
-    const { name, location, email, expertSkills, proficientSkills } = storeToRefs(ds);
-
-    const showIcons = ref(localStorage.getItem("iconMode") === "enabled");
-    const wsuLogoPath = wsuLogo;
-
+    
+    const eventStore = useEventStore();
+    const ds = useUserStore(); 
+    const loadingStore = useLoadingStore(); 
+    const { isLoading } = storeToRefs(loadingStore);
+    const { name, location, email, expertSkills, proficientSkills, profilePic } = storeToRefs(ds);
+   
     const thirdHeight = computed(() => {
       return (winWidth.value > 601)
         ? `${twothirdHeight.value - displayContainerHeight.value - 16}px`
@@ -133,9 +146,9 @@ export default {
     const displayContainerHeight = ref(0);
     const winWidth = ref(0);
 
+    const showIcons = ref(localStorage.getItem("iconMode") === "enabled");
     const toggleIcons = (data) => {
       showIcons.value = data;
-      localStorage.setItem("iconMode", data ? "enabled" : "disabled");
     };
 
     const updateHeights = () => {
@@ -145,22 +158,41 @@ export default {
     };
 
     onMounted(() => {
-      emit('view-loaded', { data: { showIconSwitch: true } });
-        
+      emit('view-loaded', { data: { includeIconSwitch: true, includeColorSwitch: false} });
+      watch(
+        () => eventStore.events["toggle-icons"],
+          (newValue) => {
+            if (newValue !== undefined) {
+              toggleIcons(newValue);
+            }
+        }
+      );
+
       watch(isLoading, async (loading) => {
         if (!loading) {
-            updateHeights(); // Adjust heights after preloader disappears
-            window.addEventListener("resize", updateHeights);
-          }
+          await nextTick();
+          updateHeights(); // Adjust heights after preloader disappears
+          window.addEventListener("resize", updateHeights);
+        }
       });
 
     });
-
+    
     onUnmounted(() => {
       window.removeEventListener("resize", updateHeights);
     });
-
+    
+    onActivated(() => {
+      updateHeights();
+      window.addEventListener("resize", updateHeights);
+    });
+    
+    onDeactivated(() => {
+      window.removeEventListener("resize", updateHeights);
+    });
+ 
     return {
+      profilePic,
       name,
       location,
       email,
@@ -168,15 +200,17 @@ export default {
       proficientSkills,
       thirdHeight,
       showIcons,
+      isLoading,
       toggleIcons,
-      updateHeights,
-      wsuLogoPath,
-      isLoading, // Return `isLoading` for use in the template or logic
+      updateHeights
     };
   },
 };
 </script>
 
 <style scoped>
+.wsulogo{
+  vertical-align: middle;
+}
 /* Your styles here */
 </style>

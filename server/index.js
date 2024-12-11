@@ -8,6 +8,14 @@ const port = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Set cache headers for favicon.ico and profilepic
+app.use((req, res, next) => {
+  if (req.url === '/favicon.ico' || req.url.includes('profilepic')) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+  }
+  next();
+});
+
 // API Routes
 app.get('/ping', async (req, res) => {
   return res.status(200).send({ ping: true });
@@ -46,5 +54,6 @@ if (process.env.NODE_ENV === 'development') {
   clientApp.listen(3000, () => console.log('Client listening on port 3000'));
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}!`));
-console.log("NODE ENV VAR: " + process.env.NODE_ENV);
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

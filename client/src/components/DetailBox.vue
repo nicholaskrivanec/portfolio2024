@@ -4,14 +4,14 @@
             <h5 class="col-1 opacity">
                 <fa-icon :icon="['fas', 'caret-down']" v-show="isOpen" class="fa-fw margin-right label-icon"/>
                 <fa-icon :icon="['fas', 'caret-right']" v-show="!isOpen" class="fa-fw margin-right label-icon"/>
-                <b> {{ title1 }}</b>
+                <b><slot name="title1">{{ title1 }}</slot></b>
                 <img v-if="logoSrc" :src="logoSrc" class="dblogo" alt="logo" />
             </h5>
-            <h6 class="col-2 text-teal">
+            <h6 v-show="date" class="col-2 text-teal">
                 <fa-icon :icon="['fas', 'calendar-days']" class="fa-fw margin-right label-icon" />{{ date }}
             </h6>
         </summary>
-        <h5 class="col-3 opacity"><b>{{ title2 }}</b></h5>
+        <h5 class="col-3 opacity"><b><slot name="title2">{{ title2 }}</slot></b></h5>
         <p><slot></slot></p>
         <hr v-if="!lastRow">
         <br v-if="lastRow">
@@ -23,14 +23,13 @@
 export default {
     name: 'DetailBox',
     props: {
-        title1: { type: String, required: true },
+        title1: { type: String, required: false },
         title2: { type: String, required: false },
         date: { type: String, required: false },
         lastRow: { type: Boolean, required: false, default: false },
         onOpen: { type: Function, default: null },
         onClose: { type: Function, default: null },
-        onToggle: { type: Function, default: null },
-        logoSrc: { type: String, default: null }
+        onToggle: { type: Function, default: null }
     }
     , data: () => ({ isOpen: false })
     , methods: {

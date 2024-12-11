@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', {
       ,{name: "Twitter"   ,icon: "square-x-twitter"   ,title:"x.com/omiccoder"                  ,url: "https://x.com/omiccoder"}
     ],
     data: null,
-    profileImage: '../assets/profile_pic.png',
+    profilePic: new URL('@/assets/profile_pic.png', import.meta.url).href,
     
   })
 

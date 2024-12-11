@@ -14,7 +14,6 @@ app.component('preloader', Preloader);
 //Assets
 import './assets/main.css';
 import './assets/icons.css';
-import './assets/profile_pic.png';
 
 //Components
 import NavButton from './components/NavButton.vue';
@@ -31,9 +30,6 @@ app.component('nav-bar', NavBar);
 
 import ToggleSwitch from './components/ToggleSwitch.vue';
 app.component('toggle-switch', ToggleSwitch);
-
-import CardSlot from './components/CardSlot.vue';
-app.component('card-slot', CardSlot);
 
 import ColorPicker from './components/ColorPicker.vue';
 app.component('color-picker', ColorPicker);

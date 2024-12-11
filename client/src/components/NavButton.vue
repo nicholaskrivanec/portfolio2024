@@ -35,6 +35,11 @@ export default {
     .nav-btn a{
         border: solid 2px transparent;
         border-radius: 10px;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-user-drag: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
     .nav-btn:hover a {
         color: var(--hover-text);

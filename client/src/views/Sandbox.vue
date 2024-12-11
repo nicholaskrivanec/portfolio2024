@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="showColors"><nav-bar></nav-bar></span>
+    <nav-bar v-show="showColors" @reset-colors="resetColors"></nav-bar>
 
     <div class="fib-svg-container">
       <ul class="inline-list">
@@ -13,8 +13,7 @@
         </rect>
 
         <path v-if="spiralPath" id="spiral" :d="spiralPath" fill="none" stroke="black" stroke-width="0.5"
-          :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }" stroke-dasharray="0"
-          stroke-dashoffset="0" />
+          :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }" stroke-dasharray="0" stroke-dashoffset="0" />
       </svg>
 
       <button @click="drawFibonacciGoldenRatio">Draw Fibonacci Pattern</button>
@@ -23,11 +22,13 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick, watch, onActivated, onDeactivated } from 'vue';
+import { useEventStore } from "@/stores/eventStore";
 
 export default {
   name: "Sandbox",
   setup(_, { emit }) {
+    const eventStore = useEventStore();
     const svgWidth = ref(window.innerWidth * 0.8);
     const svgHeight = ref(window.innerHeight * 0.8);
     const rectangles = ref([]);
@@ -35,16 +36,11 @@ export default {
     const isAnimating = ref(false);
     const isSpiralVisible = ref(false);
     const animationDelay = ref(250);
-    const showColors = ref(localStorage.getItem("colorMode") === "enabled");
 
-    const toggleColors = (data) => {
-      showColors.value = data;
-      localStorage.setItem("colorMode", data ? "enabled" : "disabled");
-    };
 
     const updateSVGSize = () => {
       svgWidth.value = window.innerWidth * 0.8;
-      svgHeight.value = window.innerHeight * 0.8;
+      svgHeight.value = window.innerHeight * 0.75;
     };
 
     const fibonacci = (n) => {
@@ -143,14 +139,36 @@ export default {
       spiral.style.transition = "stroke-dashoffset 2s ease-in-out";
       spiral.style.strokeDashoffset = "0";
     };
+    
+    const showColors = ref(localStorage.getItem("colorMode") === "enabled");
+    const toggleColors = (data) => {
+      showColors.value = data;
+    };
 
-    onMounted(() => {
+    const resetColors = () => {
+      
+    }
+
+    onMounted(() => { 
+      emit('view-loaded', { data: { includeColorSwitch: true, includeIconSwitch: false } });
+      
+      watch(
+        () => eventStore.events["toggle-colors"],
+          (newValue) => {
+            if (newValue !== undefined) {
+              toggleColors(newValue);
+            }
+        }
+      );
       window.addEventListener("resize", updateSVGSize);
-      nextTick(() => {
-        emit('view-loaded', { data: { showColorSwitch: true } });
-      });
+     
     });
-
+    onDeactivated(() => {
+      window.removeEventListener("resize", updateSVGSize);
+    });
+    onActivated(() => {
+      window.addEventListener("resize", updateSVGSize);
+    });
     onBeforeUnmount(() => {
       window.removeEventListener("resize", updateSVGSize);
     });

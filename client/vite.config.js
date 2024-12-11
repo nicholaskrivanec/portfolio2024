@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 const isDev = process.env.VITE_DEV === 'true';
 
 export default defineConfig({
-  base: './', // Use relative paths for assets
+  base: './', 
   plugins: [vue()],
   resolve: {
     alias: {

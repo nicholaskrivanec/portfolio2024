@@ -1,25 +1,22 @@
 <template>
-    <slot>
-        <nav class="card">
-          <div v-for="cp in colorpickers" :key="cp.id">
-            <color-picker :id="cp.id" :label="cp.label" :varName="cp.var" />
-          </div>
-        </nav>
-    </slot>
+    <nav class="card">
+        <div v-for="(cp,index) in colorpickers" :key="index">
+            <color-picker :label="cp.label" :varName="cp.var" />
+        </div>
+    </nav>
 </template>
 
 <script>
-    import { v4 as uuidv4 } from 'uuid';
     export default {
         name:"NavBar"
         ,data(){ return {
                 colorpickers: [   
-                    {id: uuidv4(), var:"--primary-background",  label: "Main"}
-                    ,{id: uuidv4(), var:"--image-background",   label: "Image"}                        
-                    ,{id: uuidv4(), var:"--menu-background",    label: "Menu"}
-                    ,{id: uuidv4(), var:"--icon-header-text",   label: "Header"}                          
-                    ,{id: uuidv4(), var:"--header-icon",        label: "Header Icon"}
-                    ,{id: uuidv4(), var:"--container",          label: "Text Box"}
+                     { var:"--primary-background", label: "Main"}
+                    ,{ var:"--image-background",   label: "Image"}                        
+                    ,{ var:"--menu-background",    label: "Menu"}
+                    ,{ var:"--icon-header-text",   label: "Header"}                          
+                    ,{ var:"--header-icon",        label: "Header Icon"}
+                    ,{ var:"--container",          label: "Text Box"}
                 ]
             };
         }

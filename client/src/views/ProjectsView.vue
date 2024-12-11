@@ -2,40 +2,42 @@
     <div id="github-viewer">
         <h1>GitHub Repository Viewer</h1>
         <form @submit.prevent="fetchRepos">
-            <input type="text" v-model="githubUrl" placeholder="Enter GitHub Profile URL" required />
+            <input type="text" v-model="githubUrl" placeholder="Enter GitHub Profile URL or username" required value="nicholaskrivanec" />
             <button type="submit">Fetch Repos</button>
         </form>
         <div v-if="error" class="error">{{ error }}</div>
-        <ul v-if="repositories.length">
-            <li v-for="repo in repositories" :key="repo.id">
-                <h2>{{ repo.name }}</h2>
-                <p>{{ repo.description || 'No description available' }}</p>
-            </li>
-        </ul>
-        <p v-if="!repositories.length && !error && submitted">No repositories found.</p>
+        <div v-if="repositories.length">
+            <detail-box v-for="repo in repositories" :key="repo.id">
+                <template v-slot:title1 ><a target="_blank" :href="repo.html_url" :title="repo.html_url">{{ repo.name }}</a></template>
+                <template v-slot:title2 >{{ repo.language }}</template>
+                <template v-slot><p>{{ repo.description || 'No description available' }} </p></template>
+            </detail-box>
+        </div>
+        <p v-if="!repositories.length && !error && submitted">Error: {{ error }}</p>
     </div>
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, computed } from 'vue';
 import { useGitHubStore } from '@/stores/github';
 
 export default {
-    name: "ProjectsView"
+name: "ProjectsView"        
     ,setup(_, { emit }) {
-        const githubUrl = ref('');
+        const githubUrl = ref('https://github.com/nicholaskrivanec');
         const submitted = ref(false);
-        const store = useGitHubStore();
-        const { repositories, error } = store;
+        const gitStore = useGitHubStore();
+        const repositories = computed(() => gitStore.repositories);
+        const error = computed(() => gitStore.error);
 
         const fetchRepos = () => {
             const username = extractUsername(githubUrl.value);
             if (!username) {
-                store.error = 'Invalid GitHub URL.';
+                gitStore.error = 'Invalid GitHub URL.';
                 return;
             }
             submitted.value = true;
-            store.fetchRepositories(username);
+            gitStore.fetchRepositories(username);
         };
 
         const extractUsername = (url) => {
@@ -43,8 +45,10 @@ export default {
             return match ? match[1] : null;
         };
         onMounted(()=> {
+            
             nextTick(()=> {
-                emit('view-loaded')
+                emit('view-loaded', {data:{includeIconsSwitch: false, includeColorSwitch: false}});
+                fetchRepos();
             });
         });
         return {
@@ -65,28 +69,28 @@ export default {
     margin: 20px;
 }
 
-form {
-    margin-bottom: 20px;
+input[type=text] {
+  width: 300px;;
+  padding: 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+  border-radius:10px;
 }
 
-input {
-    padding: 10px;
-    width: 300px;
+input[type=text]:focus {
+  border: 3px solid #555;
 }
 
 button {
     padding: 10px 20px;
+    margin-left: 8px;
+    border-radius: 10px;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    margin: 20px 0;
-    text-align: left;
-}
 
 .error {
     color: red;

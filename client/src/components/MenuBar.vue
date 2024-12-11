@@ -10,15 +10,16 @@
 
       <div class="menu-togglers">
         <toggle-switch label="Dark Mode" id="dark-mode-toggle" :checked="isDarkMode" :onChange="toggleDarkMode" />
-        <toggle-switch v-if="includeIconSwitch" label="Icons" id="icon-toggle" :checked="showIcons" :onChange="toggleIconMode" />
-        <toggle-switch v-if="includeColorSwitch" label="Colors" id="icon-toggle" :checked="showColors" :onChange="toggleColorMode" />
+        <toggle-switch v-show="includeIconSwitch" label="Icons" id="icon-toggle" :checked="showIcons" :onChange="toggleIconMode" />
+        <toggle-switch v-show="includeColorSwitch" label="Colors" id="color-toggle" :checked="showColors" :onChange="toggleColorMode" />
       </div>
     </div>
   </header>
 </template>
 
 <script>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useEventStore } from "@/stores/eventStore";
 
 export default {
   name: "MenuBar",
@@ -26,14 +27,14 @@ export default {
     includeColorSwitch: { type: Boolean, required: false, default: false },
     includeIconSwitch: { type: Boolean, required: false, default: false },
   },
-  emits: ["toggle-icons", "toggle-colors"],
   setup(props, { emit }) {
+    const eventStore = useEventStore();
     const isDarkMode = ref(localStorage.getItem("darkMode") === "enabled");
     const iconMode = ref(localStorage.getItem("iconMode") === "enabled");
     const colorMode = ref(localStorage.getItem("colorMode") === "enabled");
 
-    const showIcons = computed(() => iconMode.value);
-    const showColors = computed(() => props.includeColorSwitch && colorMode.value);
+    const showIcons = ref(iconMode);
+    const showColors = ref(colorMode);
 
     const toggleDarkMode = () => {
       isDarkMode.value = !isDarkMode.value;
@@ -44,22 +45,17 @@ export default {
     const toggleIconMode = () => {
       iconMode.value = !iconMode.value;
       localStorage.setItem("iconMode", iconMode.value ? "enabled" : "disabled");
-      emit("toggle-icons", iconMode.value);
+      eventStore.emit("toggle-icons", iconMode.value);
     };
 
     const toggleColorMode = () => {
       colorMode.value = !colorMode.value;
       localStorage.setItem("colorMode", colorMode.value ? "enabled" : "disabled");
-      emit("toggle-colors", colorMode.value);
+      eventStore.emit("toggle-colors", colorMode.value);
     };
 
     onMounted(() => {
       document.body.classList.toggle("dark-mode", isDarkMode.value);
-
-      if (!props.includeColorSwitch) {
-        colorMode.value = false;
-        localStorage.setItem("colorMode", "disabled");
-      }
     });
 
     return {
