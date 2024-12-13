@@ -19,7 +19,7 @@
         @toggle-icons="toggleIcons" 
         @toggle-colors="toggleColors" 
       />
-      <router-view @view-loaded="handleViewLoaded" v-slot="{ Component, route }">
+      <router-view @view-loaded="handleViewLoaded" v-slot="{ Component, route }" :class="clear-fix">
         <keep-alive :include="cachedComponents">
           <component :is="Component" :key="route.fullPath" />
         </keep-alive>
@@ -46,8 +46,8 @@ const cachedComponents = computed(() =>
     .map((route) => route.name)
 );
 
-watch(() => route.path, (newPath) => {
-  includeIconSwitch.value = newPath === '/';
+watch(() => route.path, (newValue, oldValue) => {
+  includeIconSwitch.value = newValue === '/';
 });
 
 function handleViewLoaded(payload) {

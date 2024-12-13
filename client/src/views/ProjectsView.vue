@@ -1,12 +1,12 @@
 <template>
     <div id="github-viewer">
-        <h1>GitHub Repository Viewer</h1>
+        <h2>GitHub Repository Viewer</h2>
         <form @submit.prevent="fetchRepos">
             <input type="text" v-model="githubUrl" placeholder="Enter GitHub Profile URL or username" required value="nicholaskrivanec" />
             <button type="submit">Fetch Repos</button>
         </form>
         <div v-if="error" class="error">{{ error }}</div>
-        <div v-if="repositories.length">
+        <div class="container card scrollbar-y scrollbar-x" v-if="repositories.length">
             <detail-box v-for="repo in repositories" :key="repo.id">
                 <template v-slot:title1 ><a target="_blank" :href="repo.html_url" :title="repo.html_url">{{ repo.name }}</a></template>
                 <template v-slot:title2 >{{ repo.language }}</template>
@@ -90,7 +90,6 @@ button {
     margin-left: 8px;
     border-radius: 10px;
 }
-
 
 .error {
     color: red;

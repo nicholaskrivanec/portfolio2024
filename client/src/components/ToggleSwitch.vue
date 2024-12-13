@@ -36,21 +36,23 @@ export default {
 
 <style scoped>
 .menu-toggle {
-  display: flex;
-  align-items: center;
-  margin-left: 20px;
+    white-space: nowrap;
 }
 
-.menu-toggle label {
-  margin-right: 10px;
-  color: var(--menu-text);
-  font-size: 14px;
-  cursor: pointer;
+.menu-toggle label{
+    margin-right: 2px;
+    color: var(--menu-text);
+    font-size: 10pt;
+    cursor: pointer;
+    text-align: right;
+    vertical-align: middle;
+    line-height: 100%;
+    font-weight: bold;
 }
 
 #icon-toggle {
   margin-left: 10px;
-  font-size: 10pt;
+  font-size: 13px;
   user-select: none;
 }
 

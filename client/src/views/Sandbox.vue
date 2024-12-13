@@ -6,7 +6,10 @@
       <ul class="inline-list">
         <li v-for="(rect, index) in rectangles" :key="index">{{ rect.size }}</li>
       </ul>
-      <svg :width="svgWidth" :height="svgHeight" xmlns="http://www.w3.org/2000/svg">
+      <button @click="drawFibonacciGoldenRatio" ref="fibBtn">Draw Fibonacci Pattern</button>
+      <svg ref="recs" class="card2" xmlns="http://www.w3.org/2000/svg">
+
+        
         <rect v-for="(rect, index) in rectangles" :key="index" :x="rect.x" :y="rect.y" :width="rect.size"
           :height="rect.size" :fill="rect.color" :stroke="rect.borderColor" :stroke-width="rect.borderWidth"
           :class="{ animated: isAnimating }" :style="{ animationDelay: `${index * animationDelay}ms` }">
@@ -15,37 +18,31 @@
         <path v-if="spiralPath" id="spiral" :d="spiralPath" fill="none" stroke="black" stroke-width="0.5"
           :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }" stroke-dasharray="0" stroke-dashoffset="0" />
       </svg>
-
-      <button @click="drawFibonacciGoldenRatio">Draw Fibonacci Pattern</button>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount, nextTick, watch, onActivated, onDeactivated } from 'vue';
+import { ref, onMounted, nextTick, watch, onDeactivated, onBeforeUnmount } from 'vue';
 import { useEventStore } from "@/stores/eventStore";
 
 export default {
   name: "Sandbox",
   setup(_, { emit }) {
     const eventStore = useEventStore();
-    const svgWidth = ref(window.innerWidth * 0.8);
-    const svgHeight = ref(window.innerHeight * 0.8);
     const rectangles = ref([]);
     const spiralPath = ref("");
     const isAnimating = ref(false);
     const isSpiralVisible = ref(false);
     const animationDelay = ref(250);
-
-
-    const updateSVGSize = () => {
-      svgWidth.value = window.innerWidth * 0.8;
-      svgHeight.value = window.innerHeight * 0.75;
-    };
+    const fibBtn = ref(null);
+    const recs = ref(null);
 
     const fibonacci = (n) => {
-      let [size, x, y] = [1, svgWidth.value * 0.3333, svgHeight.value * 0.6666];
-      let fibs = [{ size, x, y, cx: x + size / 2, cy: y + size / 2 }];
+      let [size, x, y] = [ 1, (recs.value) ? recs.Width : (window.innerWidth - 100) * 0.3333
+        , (recs.value) ? recs.Height : (window.innerHeight - 100) * 0.6666];
+      
+        let fibs = [{ size, x, y, cx: x + size / 2, cy: y + size / 2 }];
 
       for (let i = 1; i < n; i++) {
         switch (i % 4) {
@@ -71,12 +68,19 @@ export default {
       return fibs;
     };
 
+
+    const t = ref(null);
+
+
+    
     const drawFibonacciGoldenRatio = () => {
       isAnimating.value = false;
       isSpiralVisible.value = false;
       rectangles.value = [];
 
       nextTick(() => {
+        if (fibBtn.value) fibBtn.value.onClick = stopAnimation;
+
         const fibs = fibonacci(19);
         rectangles.value = fibs.map((rect) => ({
           x: rect.x,
@@ -87,13 +91,13 @@ export default {
           borderColor: "black",
         }));
         spiralPath.value = generateSpiralPath(fibs);
-        isAnimating.value = true;
-
+        isAnimating.value = true;    
         const totalAnimationTime = rectangles.value.length * animationDelay.value + 500;
-        setTimeout(() => {
+        t.value = setInterval(() => {
           isSpiralVisible.value = true;
           animateSpiral();
         }, totalAnimationTime);
+        
       });
     };
 
@@ -139,14 +143,22 @@ export default {
       spiral.style.transition = "stroke-dashoffset 2s ease-in-out";
       spiral.style.strokeDashoffset = "0";
     };
-    
+
+    const stopAnimation = () =>{
+      clearInterval(t.value);
+      if(fibBtn.value) fibBtn.value.onClick = drawFibonacciGoldenRatio;
+      isAnimating.value = false;
+      isSpiralVisible.value = false;
+      rectangles.value = [];
+    };
+
     const showColors = ref(localStorage.getItem("colorMode") === "enabled");
     const toggleColors = (data) => {
       showColors.value = data;
     };
 
     const resetColors = () => {
-      
+
     }
 
     onMounted(() => { 
@@ -160,22 +172,10 @@ export default {
             }
         }
       );
-      window.addEventListener("resize", updateSVGSize);
-     
-    });
-    onDeactivated(() => {
-      window.removeEventListener("resize", updateSVGSize);
-    });
-    onActivated(() => {
-      window.addEventListener("resize", updateSVGSize);
-    });
-    onBeforeUnmount(() => {
-      window.removeEventListener("resize", updateSVGSize);
     });
 
+
     return {
-      svgWidth,
-      svgHeight,
       rectangles,
       spiralPath,
       isAnimating,
@@ -190,18 +190,22 @@ export default {
 </script>
 
 <style scoped>
-.fib-svg-container {
-  display: block;
-  width: 100%;
-  margin: 20px auto;
-  text-align: center;
+.fib-svg-container{
+    width: calc(100% - 120px);
+    height: calc(100% - 100px);
+    position: absolute;
+    top: 60px;
+    left: 100px;
 }
-
 svg {
-  display: block;
-  margin: auto;
-  background-color: white;
-  border: 1px solid black;
+  position:relative;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color: var(--tiffany-blue);
+  border: 1px solid rgba(0, 0, 0, 0.467);
+  border-radius: 8px;
 }
 
 rect.animated {
@@ -216,10 +220,33 @@ rect.animated {
 }
 
 button {
-  display: block;
-  margin: 10px auto;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
+    position: relative;
+    top: 40px;
+    left: 20px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 100;
+    height: 30px;
+    background-color: #ffffffcc;
+    opacity: .8;
+    
+}
+button:hover {
+  background-color: var(--hover-background);
+  border: solid 2px var(--hover-text);
+  box-shadow: 1px 2px 23px -3px #000000b5;
+  opacity:1;
+  transition: background-color 0.3s ease, border 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+}
+.inline-list {
+    position: fixed;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    top: 67px;
+    z-index: 1000;
+    left: 99px;
+    font-weight: bold;
 }
 </style>
