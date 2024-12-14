@@ -191,11 +191,11 @@ export default {
 
 <style scoped>
 .fib-svg-container{
-    width: calc(100% - 120px);
-    height: calc(100% - 100px);
+    width: calc(100% - 255px);
+    height: calc(100% - 110px);
     position: absolute;
     top: 60px;
-    left: 100px;
+    left: 230px;
 }
 svg {
   position:relative;

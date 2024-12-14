@@ -1,6 +1,7 @@
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useEventStore } from "@/stores/eventStore";
+import { useUserStore } from '@/stores/userStore';
 
 export default {
   name: "MenuBar",
@@ -10,30 +11,35 @@ export default {
   },
   setup(props, { emit }) {
     const eventStore = useEventStore();
-    const isDarkMode = ref(localStorage.getItem("darkMode") === "enabled");
-    const iconMode = ref(localStorage.getItem("iconMode") === "enabled");
-    const colorMode = ref(localStorage.getItem("colorMode") === "enabled");
+    const store = useUserStore();
+    const isDarkMode = computed({
+      get: () => store.isDarkMode,
+      set: (value) => {
+        store.isDarkMode = value; 
+        localStorage.setItem("darkMode", value ? "enabled" : "disabled");
+        document.body.classList.toggle("dark-mode", value); 
+        eventStore.emit("toggle-dark-mode", value); 
+      }
+    });
+    const iconMode = computed({
+      get: () => store.iconMode,
+      set: (value) => {
+        store.iconMode = value; 
+        localStorage.setItem("iconMode", value ? "enabled" : "disabled");
+        eventStore.emit("toggle-icons", value); 
+      }
+    }); 
+    const colorMode = computed({
+      get: () => store.colorMode,
+      set: (value) => {
+        store.colorMode = value; 
+        localStorage.setItem("colorMode", value ? "enabled" : "disabled");
+        eventStore.emit("toggle-colors", value); 
+      }
+    }); 
 
     const showIcons = ref(iconMode);
     const showColors = ref(colorMode);
-
-    const toggleDarkMode = () => {
-      isDarkMode.value = !isDarkMode.value;
-      document.body.classList.toggle("dark-mode", isDarkMode.value);
-      localStorage.setItem("darkMode", isDarkMode.value ? "enabled" : "disabled");
-    };
-
-    const toggleIconMode = () => {
-      iconMode.value = !iconMode.value;
-      localStorage.setItem("iconMode", iconMode.value ? "enabled" : "disabled");
-      eventStore.emit("toggle-icons", iconMode.value);
-    };
-
-    const toggleColorMode = () => {
-      colorMode.value = !colorMode.value;
-      localStorage.setItem("colorMode", colorMode.value ? "enabled" : "disabled");
-      eventStore.emit("toggle-colors", colorMode.value);
-    };
 
     onMounted(() => {
       document.body.classList.toggle("dark-mode", isDarkMode.value);
@@ -43,9 +49,9 @@ export default {
       isDarkMode,
       showIcons,
       showColors,
-      toggleDarkMode,
-      toggleIconMode,
-      toggleColorMode,
+      toggleDarkMode: () => isDarkMode.value = !isDarkMode.value,
+      toggleIconMode: () => iconMode.value = !iconMode.value,
+      toggleColorMode: () => colorMode.value = !colorMode.value
     };
   },
 };

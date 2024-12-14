@@ -1,58 +1,110 @@
 <template>
     <nav class="card scrollbar-y">
-        <div v-for="(cp,index) in colorpickers" :key="index">
-            <color-picker :label="cp.label" :varName="cp.var" />
+        <div v-for="(cp, index) in colorpickers" :key="index">
+            <color-picker :label="cp.label" :varName="cp.var" :value="cp.val" />
+            <span>{{ cp.label + " " + cp.var + " " + cp.val }}</span>
         </div>
     </nav>
 </template>
 
 <script>
-    export default {
-        name:"NavBar"
-        ,data(){ return {
-                colorpickers: [   
-                     { var:"--primary-background", label: "Main"}
-                    ,{ var:"--image-background",   label: "Image"}                        
-                    ,{ var:"--menu-background",    label: "Menu"}
-                    ,{ var:"--icon-header-text",   label: "Header"}                          
-                    ,{ var:"--header-icon",        label: "Header Icon"}
-                    ,{ var:"--container",          label: "Text Box"}
-                ]
-            };
-        }
-        ,methods: {
-            resetColors() {
-                const isDarkMode = document.body.classList.contains('dark-mode');
-                const target = isDarkMode ? document.body : document.documentElement;
-                const styles = target.style;
+import { ref, onMounted, watch} from 'vue';
+import { useUserStore } from '../stores/userStore'; 
 
-                for (let i = styles.length - 1; i >= 0; i--) {
-                    const property = styles[i];
-                    if (property.startsWith('--')) {
-                        target.style.removeProperty(property);
-                    }
+export default {
+    name: "NavBar",
+    setup() {
+        const store = useUserStore();
+        const colorpickers = ref([]);
+
+        const removeInlineVars = () => {
+            const target = store.isDarkMode ? document.body : document.documentElement;
+            for (const property of target.style) {
+                if (property.startsWith('--')) {
+                    target.style.removeProperty(property);
                 }
-                this.colorpickers.forEach(cp => {
-                    if (cp && typeof cp.resetColor === 'function') cp.resetColor();
-                });
             }
-        }
-    }
+        };
+        const resetColors = () => {
+            removeInlineVars(); 
+            colorpickers.value = []; 
+            colorpickers.value = fetchRootVariables(); 
+        };
+        
+        const toCamelCase = (name) => {
+            const cleanVariable = name.startsWith('--') ? name.slice(2) : name;
+            return cleanVariable.split('-').map((word, index) => {
+                if (index === 0) 
+                    return word; 
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }).join('');
+        };  
+        
+
+        const fetchRootVariables = () => {
+            const variablesArray = [];
+
+            for (const sheet of document.styleSheets) {
+                try {
+                    const rules = sheet.cssRules;
+
+                    for (const rule of rules) {
+                        // Ensure the rule targets :root and has style properties
+                        if (rule.selectorText === ':root' && rule.style) {
+                            const style = rule.style;
+
+                            for (const property of style) {
+                                // Check if the property is a CSS custom property
+                                if (property.startsWith('--')) {
+                                    variablesArray.push({
+                                        var: property,
+                                        val: style.getPropertyValue(property).trim(),
+                                        label: toCamelCase(property),
+                                    });
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.warn(`Cannot access stylesheet: ${sheet.href}`, e);
+                }
+            }
+
+            return variablesArray;
+        };
+
+        const setColorComponents = () => {
+            colorpickers.value = fetchRootVariables();
+        };
+
+        onMounted( () => { 
+            setColorComponents();
+            watch(() => store.isDarkMode,
+                (newValue) => {
+                    if (newValue !== undefined) resetColors();
+
+            });
+        });
+
+        return {
+            colorpickers,
+            resetColors,
+        };
+    },
+};
 </script>
 
-<style>
+<style scoped>
+
 nav {
-    width: 88px;
+    width: 190px;
     position: fixed;
-    left: 10px;
+    left: 20px;
     top: 90px;
-    font-size: 9pt;
+    bottom: 20px;
+    font-size: 11px;
+    overflow-y: auto;
     background-color: var(--nav-background);
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-evenly;
-    height: calc( 100% - 100px);
+    border-radius:8px;
 }
 </style>

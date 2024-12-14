@@ -28,6 +28,8 @@ name: "ProjectsView"
         const submitted = ref(false);
         const gitStore = useGitHubStore();
         const repositories = computed(() => gitStore.repositories);
+        const profile = computed(() => gitStore.profile);
+        const activity = computed(() => gitStore.activity); 
         const error = computed(() => gitStore.error);
 
         const fetchRepos = () => {
@@ -38,25 +40,53 @@ name: "ProjectsView"
             }
             submitted.value = true;
             gitStore.fetchRepositories(username);
+            gitStore.fetchUserProfile(username);
+            gitStore.fetchUserActivity(username);
         };
 
+
+        const fetchProfile = () => {
+            const username = extractUsername(githubUrl.value);
+            if (!username) {
+                gitStore.error = 'Invalid GitHub URL.';
+                return;
+            }
+            submitted.value = true;
+            gitStore.fetchUserProfile(username);
+        }
         const extractUsername = (url) => {
             const match = url.match(/github\.com\/([\w-]+)/);
             return match ? match[1] : null;
         };
+
+        const fetchActivity = () => {
+            const username = extractUsername(githubUrl.value);
+            if (!username) {
+                gitStore.error = 'Invalid GitHub URL.';
+                return;
+            }
+            submitted.value = true;
+            gitStore.fetchUserActivity(username);
+        }   
         onMounted(()=> {
             
             nextTick(()=> {
                 emit('view-loaded', {data:{includeIconsSwitch: false, includeColorSwitch: false}});
                 fetchRepos();
+                fetchProfile();
+                fetchActivity();
             });
         });
         return {
             githubUrl,
             repositories,
+            profile,
+            activity,
             error,
             submitted,
             fetchRepos,
+            fetchProfile,
+            fetchActivity,
         };
     },
 };

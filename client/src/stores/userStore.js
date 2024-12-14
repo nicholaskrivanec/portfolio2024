@@ -29,7 +29,12 @@ export const useUserStore = defineStore('user', {
     ],
     data: null,
     profilePic: new URL('@/assets/profile_pic.png', import.meta.url).href,
-    
+    isDarkMode: localStorage.getItem('darkMode') === 'enabled' ? true 
+      : localStorage.getItem('darkMode') === 'disabled' ? false 
+      : window.matchMedia('(prefers-color-scheme: light)').matches === false,
+    iconMode: localStorage.getItem('iconMode') === 'enabled' ? true : false,
+    colorMode: localStorage.getItem('colorMode') === 'enabled' ? true : false,
+
   })
 
 });

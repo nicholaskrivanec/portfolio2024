@@ -2,35 +2,35 @@
   <label :for="id" class="color-picker" :title="varName">
     <div>{{ label }}</div>
     <!-- <div>{{ hexColor }}</div> -->
-    <input type="color" :id="id" v-model="hexColor" @input="updateCSSVariable" />
+    <input type="color" v-model="hexColor" @input="updateCSSVariable" />
   </label>
 </template>
 
 <script>
 import { ref, watch, onMounted, computed } from "vue";
+import { useUserStore } from "../stores/userStore"; 
 
 export default {
   name: "ColorPicker",
   props: {
-    id: { type: String, required: true },
-    varName: { type: String, required: true },
-    label: { type: String, required: true },
+    var: { type: String, required: true },
+    label: { type: String, required: true }
   },
   setup(props) {
-    const hexColor = ref("#ffffff");
+    const store = useUserStore();
     const defaultColor = computed(() => {
       return getCSSVariableValue(varName.value);
     });
+    const hexColor = ref(defaultColor.value);
 
     const getCSSVariableValue = (variableName) => {
       const computedStyle = getComputedStyle(document.body);
       const value = computedStyle.getPropertyValue(variableName)?.trim();
       return value || "#ffffff";
     };
-
-    const updateCSSVariable = () => {
-      const isDarkMode = document.body.classList.contains("dark-mode");
-      if (isDarkMode) {
+n
+    const updateCSSVariable = (newValue) => {
+      if (store.isDarkMode) {
         document.body.style.setProperty(props.varName, hexColor.value);
       } else {
         document.documentElement.style.setProperty(props.varName, hexColor.value);
@@ -53,7 +53,7 @@ export default {
       hexColor,
       defaultColor,
       updateCSSVariable,
-      resetColor
+      resetColor,
     };
   },
 };

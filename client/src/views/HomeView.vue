@@ -10,7 +10,7 @@
             <h6 class="picture-title">{{ name }}</h6>
             <p><fa-icon :icon="['fas', 'briefcase']" class="fa-fw" />Full Stack Web Developer</p>
             <p><fa-icon :icon="['fas', 'home']" class="fa-fw" />{{ location }}</p>
-            <p class="email_address" :title="email"><fa-icon :icon="['fas', 'envelope']" class="fa-fw" />{{ email }}
+            <p class="email_address" :data-tooltip="email"><fa-icon :icon="['fas', 'envelope']" class="fa-fw" />{{ email }}
             </p>
             <hr>
             <p class="skills-label">
@@ -22,7 +22,7 @@
                 <li v-for="skill in expertSkills" :key="skill">{{ skill.label }}</li>
               </ul>
               <div class="flex-row" v-show="showIcons">
-                <span v-for="skill in expertSkills" :key="skill" :class="skill.class" :title="skill.label"></span>
+                <span v-for="skill in expertSkills" :key="skill" :class="[skill.class, 'tooltip']" :data-tooltip="skill.label"></span>
               </div>
             </div>
             <div class="status-bar">
@@ -33,7 +33,7 @@
                 <li v-for="skill in proficientSkills" :key="skill">{{ skill.label }}</li>
               </ul>
               <div class="flex-row" v-show="showIcons">
-                <span v-for="skill in proficientSkills" :key="skill" :class="skill.class" :title="skill.label"></span>
+                <span v-for="skill in proficientSkills" :key="skill" :class="[skill.class, 'tooltip']" :data-tooltip="skill.label"></span>
               </div>
             </div>
             <div class="status-bar">

@@ -1,152 +1,134 @@
 :root {
-  --primary-background: #A0E7E5;
-  --primary-background-text: #000000ba;
-  --menu-background: #71CDCD;
-  --menu-text: #00000097;
-  --icon-header-text: #757575;
-  --image-background: #75D5D0;
-  --status-bar-text: #ffffff;
-  --status-bar-background: #ffe5e5;
-  --status-bar-fill: #42B2A6;
-  --p-background: #ffffff;
-  --p-background-text: #009688;
-  --container-text: #757575;
-  --container: #ffffff;
-  --box-shadow-light: rgba(0, 0, 0, 0.16);
-  --box-shadow-light2: rgba(0, 0, 0, 0.12);
-  --box-shadow-dark: rgba(0, 0, 0, 0.2);
-  --box-shadow-dark2: #00000030;
-  --hover-text: #0b304b;
-  --hover-background: #009688;
-  --header-icon: #009688;
-  --grey-text: #757575;
-  --slider-background1: #878787;
-  --slider-background2: #003366;
-  --slider: #fff;
-  --download-btn: transparent;
-  --download-btn-text: #279292;
-  --download-btn-hover: #00a3a3;
-  --download-btn-text-hover: #fff;
-  --nav-background-hover: #11423d;
-  --nav-background-text-hover: #009688;
-  --nav-background: #0000001a;
-  --preload-svg: #009688;
-  --menu-shine: #000000;
-  --menu-border: #00000000;
-  --scrollbar-thumb: #498484b5;
-  --scrollbar-track: #284a6924;
-  --scrollbar-border: rgba(0, 0, 0, 0);
-  
-  --mirage: #172134;
-  --link-water: #CFEAF3;
-  --bermuda: #75D5D0;
-  --hoki: #607DA1;
-  --aioli: rgba(0, 20, 55, 1);
-
-  --blue-green: #75E6DA;
+  --aioli: #001437;
   --baby-blue: #D4F1F4;
+  --bermuda: #75D5D0;
+  --blue-green: #75E6DA;
   --blue-grotto: #189AB4;
-  --navy-blue: #05445E;
-
-  --lake-baby-blue: #B1D4E0;
-  --lake-blue: #2E8BC0;
-  --lake-dark-blue: #0C2D48;
-  --lake-midnight-blue: #145DA0;
-
-  --deep-dark-blue: #050A30;
-  --deep-navy-blue: #000C66;
-  --deep-blue: #0000FF;
-  --deep-baby-blue: #7EC8E3;
-
-  --tide-baby-blue: #C3E0E5;
-  --tide-dark-blue: #274472;
-  --tide-blue-gray: #5885AF;
-  --tide-midnight-blue: #41729f;
-
-  --emerald-gold: #D6AD60;
-  --emerald-charcoal: #122620;
-  --emerald-cream: #F4EBD0;
-  --emerald-tan: #B68D40;
-
-  --pastel-pink: #FFAEBC;
-  --tiffany-blue: #A0E7E5;
-  --pastel-mint: #B4F8C8;
-  --pastel-yellow: #FBE7C6;
-  
-  --primary-color-1: #FDFFFF;
-  --primary-color-2: #D1F8F6;
-  --primary-color-3: #A0E7E4;
-  --primary-color-4: #000101;
-  --primary-color-5: #47A9A5;
-
-  /* Secondary Colors #1 */
-  --secondary1-color-1: #FDFEFF;
-  --secondary1-color-2: #D6E1F9;
-  --secondary1-color-3: #AABFEB;
-  --secondary1-color-4: #7F9BD5;
-  --secondary1-color-5: #5776B6;
-
-  /* Secondary Colors #2 */
-  --secondary2-color-1: #FDFFFD;
-  --secondary2-color-2: #D6FCD4;
-  --secondary2-color-3: #ACF3A9;
-  --secondary2-color-4: #84E77F;
-  --secondary2-color-5: #60D55A;
-
-  /* Complement Colors */
+  --box-shadow-dark: #00000033;
+  --box-shadow-dark2: #00000030;
+  --box-shadow-light: #00000029;
+  --box-shadow-light2: #0000001f;
   --complement-color-1: #FFFFFD;
   --complement-color-2: #FFE9D7;
   --complement-color-3: #FFD3B1;
   --complement-color-4: #FFB8D9;
   --complement-color-5: #FFAD6B;
-
-  --foam-teal: #29A0B1;
-  --foam-teal-green: #167D7F;
-  --foam-spearmint: #98D7C2;
+  --container-text: #757575;
+  --container: #ffffff;
+  --deep-baby-blue: #7EC8E3;
+  --deep-blue: #0000FF;
+  --deep-dark-blue: #050A30;
+  --deep-navy-blue: #000C66;
+  --download-btn-hover: #00a3a3;
+  --download-btn-text-hover: #fff;
+  --download-btn-text: #279292;
+  --download-btn: transparent;
+  --emerald-charcoal: #122620;
+  --emerald-cream: #F4EBD0;
+  --emerald-gold: #D6AD60;
+  --emerald-tan: #B68D40;
   --foam-mint: #DDFFE7;
-
-
-
+  --foam-spearmint: #98D7C2;
+  --foam-teal-green: #167D7F;
+  --foam-teal: #29A0B1;
+  --grey-text: #757575;
+  --header-icon: #009688;
+  --hoki: #607DA1;
+  --hover-background: #009688;
+  --hover-text: #0b304b;
+  --icon-header-text: #757575;
+  --image-background: #75D5D0;
+  --lake-baby-blue: #B1D4E0;
+  --lake-blue: #2E8BC0;
+  --lake-dark-blue: #0C2D48;
+  --lake-midnight-blue: #145DA0;
+  --link-water: #CFEAF3;
+  --menu-background: #71CDCD;
+  --menu-border: #00000000;
+  --menu-shine: #000000;
+  --menu-text: #00000097;
+  --mirage: #172134;
+  --nav-background-hover: #11423d;
+  --nav-background-text-hover: #009688;
+  --nav-background: #0000001a;
+  --navy-blue: #05445E;
+  --p-background-text: #009688;
+  --p-background: #ffffff;
+  --pastel-mint: #B4F8C8;
+  --pastel-pink: #FFAEBC;
+  --pastel-yellow: #FBE7C6;
+  --preload-svg: #009688;
+  --primary-background-text: #000000ba;
+  --primary-background: #A0E7E5;
+  --primary-color-1: #FDFFFF;
+  --primary-color-2: #D1F8F6;
+  --primary-color-3: #A0E7E4;
+  --primary-color-4: #000101;
+  --primary-color-5: #47A9A5;
+  --scrollbar-border: #00000000;
+  --scrollbar-thumb: #498484b5;
+  --scrollbar-track: #284a6924;
+  --secondary1-color-1: #FDFEFF;
+  --secondary1-color-2: #D6E1F9;
+  --secondary1-color-3: #AABFEB;
+  --secondary1-color-4: #7F9BD5;
+  --secondary1-color-5: #5776B6;
+  --secondary2-color-1: #FDFFFD;
+  --secondary2-color-2: #D6FCD4;
+  --secondary2-color-3: #ACF3A9;
+  --secondary2-color-4: #84E77F;
+  --secondary2-color-5: #60D55A;
+  --slider-background1: #878787;
+  --slider-background2: #003366;
+  --slider: #ffffff;
+  --status-bar-background: #ffe5e5;
+  --status-bar-fill: #42B2A6;
+  --status-bar-text: #ffffff;
+  --tide-baby-blue: #C3E0E5;
+  --tide-blue-gray: #5885AF;
+  --tide-dark-blue: #274472;
+  --tide-midnight-blue: #41729f;
+  --tiffany-blue: #A0E7E5;
 }
 
 body.dark-mode {
-  --primary-background: #172c3d;
-  --primary-background-text: #ffffff;
-  --menu-background: #0B1D2B;
-  --icon-header-text: #c7c7c7;
-  --image-background: #090909;
-  --status-bar-text: #38444d;
-  --status-bar-background: #1f252a;
-  --status-bar-fill: #009688;
-  --p-background: #ffffff;
-  --p-background-text: #FFFFFF;
+  --box-shadow-dark: #00000050;
+  --box-shadow-dark2: #00000047;
+  --box-shadow-light: #00000046;
+  --box-shadow-light2: #00000033;
   --container-text: #ffffff;
   --container: #38444d;
-  --menu-text: #ffffff;
-  --box-shadow-light: rgba(0, 0, 0, 0.16);
-  --box-shadow-light2: rgba(0, 0, 0, 0.12);
-  --box-shadow-dark: rgba(0, 0, 0, 0.2);
-  --box-shadow-dark2: rgba(0, 0, 0, 0.19);
-  --hover-text: #79c0ff;
-  --hover-background: #1F2A33;
-  --header-icon: #009688;
-  --grey-text: #c7c7c7;
-  --slider-background1: #555;
-  --slider-background2: #003366;
-  --slider: #fff;
-  --download-btn: #00bfbf;
-  --download-btn-text: #00bfbf;
   --download-btn-hover: #008a8a42;
   --download-btn-text-hover: #fff;
-  --nav-background-text-hover: #79c0ff;
-  --nav-background-hover: #1f2a33;
-  --nav-background: #38444d;
-  --preload-svg: #79c0ff;
-  --menu-shine: #c4eaf3;
+  --download-btn-text: #00bfbf;
+  --download-btn: #00bfbf;
+  --grey-text: #c7c7c7;
+  --header-icon: #009688;
+  --hover-background: #364654;
+  --hover-text: #79c0ff;
+  --icon-header-text: #c7c7c7;
+  --image-background: #090909;
+  --menu-background: #0B1D2B;
   --menu-border: #A0E7E5;
+  --menu-shine: #c4eaf3;
+  --menu-text: #ffffff;
+  --nav-background-hover: #1f2a33;
+  --nav-background-text-hover: #79c0ff;
+  --nav-background: #38444d;
+  --p-background-text: #FFFFFF;
+  --p-background: #ffffff;
+  --preload-svg: #79c0ff;
+  --primary-background-text: #ffffff;
+  --primary-background: #172c3d;
+  --scrollbar-border: #00000000;
   --scrollbar-thumb: #071119;
   --scrollbar-track: #41729f24;
-  --scrollbar-border: rgba(0, 0, 0, 0);
+  --slider-background1: #555555;
+  --slider-background2: #003366;
+  --slider: #ffffff;
+  --status-bar-background: #1f252a;
+  --status-bar-fill: #009688;
+  --status-bar-text: #38444d;
 }
 
 html {
@@ -172,12 +154,7 @@ body {
   box-sizing: inherit
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1,h2,h3,h4,h5,h6 {
   font-family: "Roboto", sans-serif, "Segoe UI", Arial;
   font-weight: 400;
   margin: 8px 0;
@@ -188,8 +165,7 @@ h2 {
   font-size: 30px;
 }
 
-h5,
-h6 {
+h5,h6 {
   font-size: 15px;
 }
 
@@ -211,15 +187,7 @@ a {
   clear: both;
 }
 
-article,
-aside,
-details,
-footer,
-header,
-main,
-menu,
-nav,
-section {
+article,aside,details,footer,header,main,menu,nav,section {
   display: block;
 }
 
@@ -267,10 +235,8 @@ svg.fa-fw {
   color: var(--icon-header-text);
 }
 
-.container:after,
-.container:before,
-.row-padding:after,
-.row-padding:before {
+.container:after,.container:before,
+.row-padding:after,.row-padding:before {
   content: "";
   display: table;
   clear: both;
@@ -337,18 +303,6 @@ img {
   text-align: center;
 }
 
-
-nav {
-  width: 88px;
-  position: fixed;
-  left: 0;
-  top: 66px;
-  bottom: 116px;
-  font-size: 11px;
-  overflow-y: auto;
-  background-color: var(--nav-background);
-}
-
 .download-resume-button {
   display: inline;
   padding: 5px 9px;
@@ -373,8 +327,7 @@ span.dl-text {
   padding-left: 8px;
 }
 
-.third,
-.twothird {
+.third,.twothird {
   float: left;
   width: 100%;
 }
@@ -442,9 +395,6 @@ span.dl-text {
 }
 
 
-
-
-
 .inline-list {
   list-style: none;
   padding: 0;
@@ -468,3 +418,50 @@ section::after, .container::after, .clear-fix::after {
   display: table;
   clear: both;
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip); /* Use the custom tooltip text */
+  position: absolute;
+  left: 50%;
+  bottom: 100%; /* Position above the element */
+  transform: translateX(-50%);
+  background-color: black;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, visibility 0.2s;
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* latin-ext */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Mu7GxKOzY.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
