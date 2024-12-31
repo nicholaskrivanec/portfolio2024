@@ -13,6 +13,10 @@ app.use((req, res, next) => {
   if (req.url === '/favicon.ico' || req.url.includes('profilepic')) {
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
   }
+  if (req.url.endsWith('.glb')) {
+    res.setHeader('Content-Type', 'model/gltf-binary');
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+  }
   next();
 });
 

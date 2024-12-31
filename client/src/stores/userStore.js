@@ -18,14 +18,36 @@ export const useUserStore = defineStore('user', {
       ,{label:'C++',          class:'cpp-icon'}
       ,{label:'Python',       class:'python-icon'}
       ,{label:'Java',         class:'java-icon'}
+      ,{label:'PowerShell',   class:'ps-icon'}
       ,{label:'SVG',          class:'dna-spinner'}
     ],
     links: [
-       {name: "LinkedIn"  ,icon: "linkedin"           ,title:"www.linkedin.com/in/nkrivanec"    ,url: "https://www.linkedin.com/in/nkrivanec"}
-      ,{name: "GitHub"    ,icon: "github"             ,title:"www.github.com/nicholaskrivanec"  ,url: "https://github.com/nicholaskrivanec"}
-      ,{name: "Facebook"  ,icon: "facebook"           ,title:"www.facebook.com/nickkrivanec"    ,url: "https://www.facebook.com/nickkrivanec"}
-      ,{name: "Instagram" ,icon: "instagram"          ,title:"www.instagram.com/krivankenstein" ,url: "https://www.instagram.com/krivankenstein"}
-      ,{name: "Twitter"   ,icon: "square-x-twitter"   ,title:"x.com/omiccoder"                  ,url: "https://x.com/omiccoder"}
+      {
+        name: "LinkedIn"  
+        ,icon: "linkedin"           
+        ,title:"www.linkedin.com/in/nkrivanec"    
+        ,url: "https://www.linkedin.com/in/nkrivanec"
+      },{
+        name: "GitHub"    
+        ,icon: "github"             
+        ,title:"www.github.com/nicholaskrivanec"  
+        ,url: "https://github.com/nicholaskrivanec"
+      },{
+        name: "Facebook"  
+        ,icon: "facebook"           
+        ,title:"www.facebook.com/nickkrivanec"    
+        ,url: "https://www.facebook.com/nickkrivanec"
+      },{
+        name: "Instagram" 
+        ,icon: "instagram"          
+        ,title:"www.instagram.com/krivankenstein" 
+        ,url: "https://www.instagram.com/krivankenstein"
+      },{
+        name: "Twitter"   
+        ,icon: "square-x-twitter"   
+        ,title:"x.com/omiccoder"                  
+        ,url: "https://x.com/omiccoder"
+      }
     ],
     data: null,
     profilePic: new URL('@/assets/profile_pic.png', import.meta.url).href,

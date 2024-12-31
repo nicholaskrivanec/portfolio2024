@@ -2,8 +2,8 @@
     <footer class="container">
       <span v-for="link in links" :key="link">
         <span class="foot_icon" >
-          <a :href="link.url" :title="link.title" target="_blank">
-            <fa-icon :icon="['fab', link.icon]" class="fa-lg footer-link" :title="link.name" />
+          <a class="tooltip" :href="link.url" :data-tooltip="link.title" target="_blank">
+            <fa-icon :icon="['fab', link.icon]" class="fa-lg footer-link" :data-tooltip="link.name" />
           </a>
         </span>
       </span>

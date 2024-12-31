@@ -1,5 +1,4 @@
 <script>
-    import { useLoadingStore } from "@/stores/loading";
     export default {
         name: 'NavButton'
         ,props: {
@@ -7,22 +6,12 @@
             icon: { type: String, required: false },
             isActive: {type: Boolean, required: false, default: false}
         }
-        ,setup(props) {
-            const loadStore = useLoadingStore();
-
-            const isLoading = () => {
-                loadStore.startLoading(props.path);
-            };
-            return {
-                isLoading,
-            };
-        }
     }
 </script>
 
 <template>
     <li class="nav-btn" :id="path">
-        <router-link :to="path" :class="nav-link" @click.prevent="isLoading">
+        <router-link :to="path" :class="nav-link">
             <div class="wrapper">
                 <span><fa-icon :icon="['fas', icon]" /></span>
                 <span class="nav-lbl row-1"><slot>Home</slot></span>

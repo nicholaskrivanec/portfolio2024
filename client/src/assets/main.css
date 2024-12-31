@@ -91,6 +91,7 @@
   --tiffany-blue: #A0E7E5;
 }
 
+
 body.dark-mode {
   --box-shadow-dark: #00000050;
   --box-shadow-dark2: #00000047;
@@ -130,12 +131,14 @@ body.dark-mode {
   --status-bar-fill: #009688;
   --status-bar-text: #38444d;
 }
+html, body {
+  overflow: visible; /* Ensure sticky can calculate position */
+}
+
 
 html {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden;
-  overflow-y: hidden;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
@@ -147,6 +150,7 @@ body {
   line-height: 1.5;
   margin: 0;
 }
+
 
 *,
 *:before,
@@ -225,12 +229,14 @@ svg.fa-fw {
   padding-top: 60px;
   width: 100%;
   display: block;
+  position:relative;
 }
 .body-scroll-area {
-  height: calc( 100vh - 61.96px );
+  height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 .header-icon {
   color: var(--icon-header-text);
 }

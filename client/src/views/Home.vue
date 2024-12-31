@@ -1,5 +1,6 @@
 <template>
-  <div class="body-scroll-area scrollbar-y scrollbar-x">
+
+  <div class="scrollbar-x" id="home" >
     <div class="main-area flex-container row-padding">
       <section class="third">
         <div class="card-2">
@@ -10,12 +11,9 @@
             <h6 class="picture-title">{{ name }}</h6>
             <p><fa-icon :icon="['fas', 'briefcase']" class="fa-fw" />Full Stack Web Developer</p>
             <p><fa-icon :icon="['fas', 'home']" class="fa-fw" />{{ location }}</p>
-            <p class="email_address" :data-tooltip="email"><fa-icon :icon="['fas', 'envelope']" class="fa-fw" />{{ email }}
-            </p>
+            <p class="email_address" :data-tooltip="email"><fa-icon :icon="['fas', 'envelope']" class="fa-fw" />{{ email }}</p>
             <hr>
-            <p class="skills-label">
-              <b><fa-icon :icon="['fas', 'asterisk']" class="fa-fw" />Skills</b>
-            </p>
+            <p class="skills-label"> <b><fa-icon :icon="['fas', 'asterisk']" class="fa-fw" />Skills</b></p>
 
             <div class="code-icons">
               <ul class="inline-list" v-show="!showIcons">
@@ -56,12 +54,9 @@
             <span class="dl-text">Resume</span>
           </a>
           <div class="container">
-            <p>Full Stack Developer with 5+ years of professional experience in ASP.NET Core, C#, SQL, JavaScript,
-              HTML, CSS, and RDL. Skilled in API development and integration, building robust back-end web services
-              with schedulers and queue processors, and executing data conversions involving complex parsing and
-              normalization. Beyond technical expertise, I bring a unique personality and positive energy to the
-              workplace, with a knack for fostering camaraderie—undefeated in office chess and a proud winner of
-              "Funniest Halloween Costume" at company events.</p>
+            <p>
+              With 5+ years of professional experience in ASP.NET Core, C#, SQL, JavaScript, HTML, CSS, and RDLC Report Building. Skilled in developing and integrating APIs, designing robust and scalable back-end web services, implementing schedulers and queue processors, and executing complex data conversions involving parsing and normalization. Beyond technical expertise, I bring a unique personality and positive energy to the workplace, with a knack for fostering camaraderie and collaboration.
+            </p>
           </div>
         </div>
 
@@ -83,14 +78,11 @@
             communications.
           </detail-box>
           <detail-box title1="Test Administrator" title2="Pearson Vue" date="2018 - 2019" :onToggle="updateHeights">
-            Administered 800+ high-stakes exams for thousands of candidates, maintaining full compliance with Pearson
-            VUE protocols and achieving a flawless security record. Managed and troubleshooted 15+ desktops, ensuring
-            seamless testing operations and swift issue resolution.
+            Administered 800+ high-stakes exams for thousands of candidates, maintaining full compliance with Pearson VUE protocols and achieving a flawless security record. Managed and troubleshooted 15+ desktops, ensuring seamless testing operations and swift issue resolution.
           </detail-box>
           <detail-box title1="Driver / Package Handler" title2="UPS" date="2014 - 2018" lastRow="true"
             :onToggle="updateHeights">
-            Maintained a misload frequency of 1 in 11,000, earning Employee of the Month for perfect attendance, and
-            achieved 100% accuracy in on-time deliveries to residents and businesses.
+            Maintained a misload frequency of 1 in 11,000, earning Employee of the Month for perfect attendance, and achieved 100% accuracy in on-time deliveries to residents and businesses.
           </detail-box>
         </div>
 
@@ -161,7 +153,7 @@ export default {
     };
     
     onMounted(() => {
-      emit('view-loaded', { data: { includeIconSwitch: true, includeColorSwitch: false} });
+      emit('view-loaded');
       watch(
         () => eventStore.events["toggle-icons"],
           (newValue) => {
@@ -218,5 +210,20 @@ export default {
 .wsulogo{
   vertical-align: middle;
 }
-/* Your styles here */
+.title-header {
+        font-size: 20px;
+        margin: auto;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    .title-area{
+        display:flex;
+        justify-content: center;
+        align-content: space-evenly;
+        width: calc(100% - 12px);
+        height: calc(100vh - 60px);
+    }
 </style>

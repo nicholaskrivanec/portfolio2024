@@ -22,8 +22,8 @@ export default defineConfig({
         }
       } : undefined,
   build: {
-    outDir: isDev ? 'dist-dev' : '../dist' // Separate output for local builds
-
+    outDir: isDev ? 'dist-dev' : '../dist',// Separate output for local builds
+    chunkSizeWarningLimit: 2000, // Increase the size to match your needs
   },
   watch: {
     ignored: ['**/.npm/**', '**/node_modules/**']

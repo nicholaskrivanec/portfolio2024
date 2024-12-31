@@ -6,16 +6,14 @@
       <ul class="inline-list">
         <li v-for="(rect, index) in rectangles" :key="index">{{ rect.size }}</li>
       </ul>
+
       <button @click="drawFibonacciGoldenRatio" ref="fibBtn">Draw Fibonacci Pattern</button>
       <svg ref="recs" class="card2" xmlns="http://www.w3.org/2000/svg">
-
-        
         <rect v-for="(rect, index) in rectangles" :key="index" :x="rect.x" :y="rect.y" :width="rect.size"
           :height="rect.size" :fill="rect.color" :stroke="rect.borderColor" :stroke-width="rect.borderWidth"
           :class="{ animated: isAnimating }" :style="{ animationDelay: `${index * animationDelay}ms` }">
         </rect>
-
-        <path v-if="spiralPath" id="spiral" :d="spiralPath" fill="none" stroke="black" stroke-width="0.5"
+        <path v-if="spiralPath" id="spiral" :d="spiralPath" fill="none"  stroke="black" stroke-width="0.5"
           :style="{ visibility: isSpiralVisible ? 'visible' : 'hidden' }" stroke-dasharray="0" stroke-dashoffset="0" />
       </svg>
     </div>
@@ -23,7 +21,7 @@
 </template>
 
 <script>
-import { ref, onMounted, nextTick, watch, onDeactivated, onBeforeUnmount } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { useEventStore } from "@/stores/eventStore";
 
 export default {
@@ -71,8 +69,6 @@ export default {
 
     const t = ref(null);
 
-
-    
     const drawFibonacciGoldenRatio = () => {
       isAnimating.value = false;
       isSpiralVisible.value = false;
@@ -157,13 +153,10 @@ export default {
       showColors.value = data;
     };
 
-    const resetColors = () => {
-
-    }
 
     onMounted(() => { 
-      emit('view-loaded', { data: { includeColorSwitch: true, includeIconSwitch: false } });
-      
+      emit('view-loaded');
+      drawFibonacciGoldenRatio();
       watch(
         () => eventStore.events["toggle-colors"],
           (newValue) => {
@@ -248,5 +241,7 @@ button:hover {
     z-index: 1000;
     left: 99px;
     font-weight: bold;
+    width: calc(100% - 99px);
+    text-align: center;
 }
 </style>

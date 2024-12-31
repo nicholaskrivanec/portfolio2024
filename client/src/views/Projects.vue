@@ -1,20 +1,21 @@
 <template>
     <div id="github-viewer">
-        <h2>GitHub Repository Viewer</h2>
+        <h2>Enter any GitHub profile or URL</h2>
         <form @submit.prevent="fetchRepos">
             <input type="text" v-model="githubUrl" placeholder="Enter GitHub Profile URL or username" required value="nicholaskrivanec" />
             <button type="submit">Fetch Repos</button>
         </form>
         <div v-if="error" class="error">{{ error }}</div>
-        <div class="container card scrollbar-y scrollbar-x" v-if="repositories.length">
+        <div class="container card scrollbar-y" v-if="repositories.length">
             <detail-box v-for="repo in repositories" :key="repo.id">
-                <template v-slot:title1 ><a target="_blank" :href="repo.html_url" :title="repo.html_url">{{ repo.name }}</a></template>
+                <template v-slot:title1 >{{ repo.name }}</template>
                 <template v-slot:title2 >{{ repo.language }}</template>
                 <template v-slot><p>{{ repo.description || 'No description available' }} </p></template>
             </detail-box>
         </div>
-        <p v-if="!repositories.length && !error && submitted">Error: {{ error }}</p>
+        <p v-if="!repositories.length && error && submitted">{{ error }}</p>
     </div>
+    <footer-area />
 </template>
 
 <script>
@@ -22,7 +23,7 @@ import { ref, onMounted, nextTick, computed } from 'vue';
 import { useGitHubStore } from '@/stores/github';
 
 export default {
-name: "ProjectsView"        
+name: "Projects"        
     ,setup(_, { emit }) {
         const githubUrl = ref('https://github.com/nicholaskrivanec');
         const submitted = ref(false);
@@ -56,7 +57,7 @@ name: "ProjectsView"
         }
         const extractUsername = (url) => {
             const match = url.match(/github\.com\/([\w-]+)/);
-            return match ? match[1] : null;
+            return match ? match[1] : url;
         };
 
         const fetchActivity = () => {
@@ -71,7 +72,7 @@ name: "ProjectsView"
         onMounted(()=> {
             
             nextTick(()=> {
-                emit('view-loaded', {data:{includeIconsSwitch: false, includeColorSwitch: false}});
+                emit('view-loaded');
                 fetchRepos();
                 fetchProfile();
                 fetchActivity();
@@ -94,9 +95,10 @@ name: "ProjectsView"
 
 <style scoped>
 #github-viewer {
-    font-family: Arial, sans-serif;
+    font-family: Arial,sans-serif;
     text-align: center;
     margin: 20px;
+    height: calc( 100vh - 165px );
 }
 
 input[type=text] {
@@ -124,5 +126,19 @@ button {
 .error {
     color: red;
     margin-top: 10px;
+}
+form{
+    display:inline-block;
+}
+.scrollbar-y {
+    overflow-y: auto;
+    max-height: calc(100% - 50px);
+    padding: 8px;
+}
+h2 {
+    display: inline-block;
+    font-size: 25px;
+    margin-right: 8px;
+    vertical-align: middle;
 }
 </style>
