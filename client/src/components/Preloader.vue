@@ -1,6 +1,15 @@
 <template>
-    <div class="preloader">
-      <svg class="spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <div class="preload">
+        <h1 v-if="showInlineDots">
+            <div class="loading-dots">
+                <span class="path-label">{{ label + " " }}</span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </h1>
+        
+      <svg v-if="showSpinner" class="spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
         <path class="path1"
             d="M60.9 403.1a48 48 0 1 0 96 0 48 48 0 1 0 -96 0z
             M208 464a48 48 0 1 0 96 0 48 48 0 1 0 -96 0z
@@ -16,47 +25,46 @@
 </template>
 
 <script>
+import { ref, onMounted, computed } from 'vue';
+export default {
+    name: "Preloader",
+    props: {
+        label: {type: String, default: 'Loading...'}
+        ,loadType: {type: String, default: 'spinner'}
+    },
+    setup(props) {
+        const showSpinner = ref(true);
+        const showInlineDots = ref(false);
+        const label = computed( () => {
+            switch(props.label){
+                case '/': return 'Home';
+                case '/projects': return 'Projects';
+                case '/sandbox': return 'Sandbox';
+                case '/catwalk': return 'Catwalk';
+                default: 'Loading'
+            }
+        });
 
+        onMounted(() => {
+            if (props.loadType === 'dots') {
+                showSpinner.value = false;
+                showInlineDots.value = true;
+            } else {
+                showSpinner.value = true;
+                showInlineDots.value = false;
+            }
+        });
+        return {
+            label
+            ,showSpinner
+            ,showInlineDots
+        };
+    },
+};
 </script>
 
 
 
 <style scoped>
-    .preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    }
-    .spin {
-    height:50px;
-    width: 50px;
-    animation-name: spin;
-    animation-direction: normal;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-timing-function: steps(8);
-    }
-
-    .spin path {
-    fill: var(--preload-svg);
-    }
-    .spin path.path1{
-    opacity: 0.4;
-    }
-    .spin path.path2{
-    opacity: 1;
-    }
-    @keyframes spin{
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(1turn);
-    }
-    }
+    
 </style>

@@ -23,5 +23,5 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-.client/sandbox/*
+client/sandbox/
 

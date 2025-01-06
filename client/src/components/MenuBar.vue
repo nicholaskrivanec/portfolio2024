@@ -1,15 +1,24 @@
 
 <template>
     <div v-show="showTitleArea" class="title-area">
-      <dots><span>Hello World! I'm Nick a Full Stack Web Developer</span></dots>
+      <dots>
+        <div class="from-left">Hello World!</div>
+        <div class="from-right">I'm Nick.</div>
+        <div class="from-left">I am a Full Stack Web Developer.</div>
+        <div>
+          <a href="#headerMenu" class="title-button" @contextmenu.prevent @dragStart.prevent>
+            <span class="dl-text">Profile</span>
+            <fa-icon :icon="['fa', 'arrow-down']" />
+          </a>
+        </div>
+      </dots>
     </div>
-    <header class="menu-bar scrollbar-x">
+    <header class="menu-bar scrollbar-x" id="headerMenu">
       <div class="menu-content">
         <ul class="nav-buttons tabs">
-          <nav-button path="/" is-active="true" icon="home">Home</nav-button>
-          <nav-button path="/projects" icon="laptop-code">Projects</nav-button>
-          <nav-button path="/sandbox" icon="truck-monster">Sandbox</nav-button>
-          <nav-button path="/catwalk" icon="cat">Cat Walk</nav-button>
+          <nav-button path="/" is-active="true" icon="home" label="Home"></nav-button>
+          <nav-button path="/projects" icon="laptop-code" label="Projects"></nav-button>
+          <nav-button path="/sandbox" icon="truck-monster" label="Sandbox"></nav-button>
         </ul>
   
         <div class="menu-togglers">
@@ -117,8 +126,98 @@ ul.nav-buttons{
 	padding-left:8px;
 }
 
-.title-area{
-  width: calc(100vw - 12px);
+.from-left, .from-right {
+    animation-duration: 1.4s;
+    animation-timing-function: cubic-bezier(0.21, 1.11, 0.81, 0.99);
+}
+.from-left {
+  animation-name: moveInLeft;
+}
+.from-right {
+  animation-name: moveInRight;
+}
+.from-bottom {
+  animation-name: moveInBottom;
+}
+a.title-button {
+    cursor: pointer;
+    animation: moveInBottom 0.7s 1.2s;
+    animation-fill-mode: backwards;
+    animation-timing-function: cubic-bezier(0.21, 1.11, 0.81, 0.99);
+    text-decoration: none;
+    padding: 6px; /* 0.8rem 3rem*/
+    border: 2px solid var(--emerald-cream);
+    border-radius: 14px; /*2px*/
+    font-size: 23px;
+    font-weight: normal;
+    background-color: var(--box-shadow-dark);
+    margin-top: 10px;/*2.4rem*/
+    height:45px;/* 17.5rem */
+    width:125px;/* 4.8rem */
+    position: relative;
+    justify-content: center;
+    display:flex;
+    user-select:none;
+    pointer-events: all;
+    -webkit-user-drag: none;
 }
 
+.title-button:before, .title-button:after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    height: 45px;
+    width: 125px;
+    border-radius: 16px;
+    border: 2px solid var(--emerald-cream);
+    filter: blur(0);
+    transform-origin: 50%;
+    z-index: 29;
+}
+
+.title-button:hover:before, .title-button:hover:after {
+    border-color: transparent;
+    filter: blur(2px);
+    transform: scaleX(1.3) scaleY(2.2);
+    transition: 800ms transform ease, 1900ms blur ease, 700ms border-color ease;
+    pointer-events: none;
+}
+
+.title-button:hover {
+    transform: translateY(-2px);
+}
+.title-button:hover:after {
+    transition-delay: 150ms;
+}
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem);
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(0);
+  }
+}
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(4rem);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
 </style>

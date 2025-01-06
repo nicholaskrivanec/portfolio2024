@@ -1,54 +1,109 @@
 <template>
   <div class="dots" id="dots">
     <div class="canvas">
-      <canvas ref="connectingDotsCanvas" class="connecting-dots"></canvas>
-      <canvas ref="connectingDotsCanvas2" class="canvas-2"></canvas>
+      <canvas ref="canvas1" class="canvas-1"></canvas>
+      <canvas ref="canvas2" class="canvas-2"></canvas>
     </div>
-    <span class="title-header"><slot></slot></span>
+    <span class="title-header"><slot>{{ title }}</slot></span>
   </div>
 </template>
 
 <script>
+import { ref, onMounted, onBeforeUnmount, computed, h } from 'vue';
 export default {
   name: "Dots",
-  mounted() {
-    const canvas1 = this.$refs.connectingDotsCanvas;
-    const canvas2 = this.$refs.connectingDotsCanvas2;
-    const ctx1 = canvas1.getContext("2d");
-    const ctx2 = canvas2.getContext("2d");
-
-    let width = (canvas1.width = canvas2.width = window.innerWidth);
-    let height = (canvas1.height = canvas2.height = window.innerHeight);
-
-    const dots = [];
+  props: {
+    title: { type: String, required: false }
+  },
+  setup(props) {
     const colors = ["#51a2e9", "#2ecc71", "#e74c3c", "#ff4d5a"];
-    //"rgb(81, 162, 233)", "rgb(81, 162, 233)", "rgb(81, 162, 233)", "rgb(81, 162, 233)", "rgb(255, 77, 90)"
-    //"#51a2e9", "#ff4d5a"
-    const cursorDot = { x: 0, y: 0, radius: 1, color: "#ffffff" };
+    const canvas1 = ref(null);
+    const canvas2 = ref(null);
+    const ctx1 = ref(null);
+    const ctx2 = ref(null);
+    const width = computed(() => window.innerWidth - 15);
+    const height = computed(() => window.innerHeight);
+    const title = ref(props.title);
+    const dots = ref([]);
+    const isLeftMouseDown = ref(false);
+    const isRightMouseDown = ref(false);
+    const speedLimit = ref(1); // Default speed limit
+    const level = ref(0);
+    const physics = { 
+      mass: [100, 200, 400]
+      ,speed: [1, 5, 25]
+      ,gravity: [1, 8, 64]
+      ,radius: [200, 300, 450]
+    };
 
-    function resizeCanvas() {
-      width = canvas1.width = canvas2.width = window.innerWidth;
-      height = canvas1.height = canvas2.height = window.innerHeight;
+    const cursorDot = ref({ 
+      x: 0
+      ,y: 0
+      ,radius: 4
+      ,color: "#ffffff"
+      ,lineColor: "rgba(255, 255, 255, 0.4)"
+      ,visible: false
+    });
+
+    const getDistance = (x1, y1, x2, y2) =>{
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      return Math.sqrt(dx * dx + dy * dy);
     }
+    const resizeCanvas = () => {
+      const w = window.innerWidth - 15;
+      const h = window.innerHeight;
 
-    window.addEventListener("resize", resizeCanvas);
-
-    function createDots() {
-      for (let i = 0; i < 100; i++) {
-        dots.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() *4  + 1,
-          dx: Math.random() * 1.1 - 1,
-          dy: Math.random() * 1.1 - 1,
-          color: colors[Math.floor(Math.random() * colors.length)],
-        });
+      if (canvas1.value && canvas2.value) {
+        canvas1.value.width = canvas2.value.width = w;
+        canvas1.value.height = canvas2.value.height = h; 
       }
-    }
 
-    function drawDots(ctx) {
-      ctx.clearRect(0, 0, width, height);
-      for (const dot of dots) {
+      const expectedDots = Math.floor((w/125) * (h/125));
+      const currentCount = dots.value.length;
+
+      if (currentCount < expectedDots) {
+        dots.value.forEach(dot => {
+          dot.x = Math.random() * w;
+          dot.y = Math.random() * h;
+        });
+
+        for (let i = currentCount; i < expectedDots; i++) {
+          const r = Math.random() * 2 + 1; // Random radius
+          const angle = Math.random() * 2 * Math.PI; // Random angle in radians
+          const speed = Math.random() * physics.speed[level.value]; // Random speed up to speedLimit
+
+          // Random velocities based on angle and speed
+          const dx = speed * Math.cos(angle);
+          const dy = speed * Math.sin(angle);
+
+          dots.value.push({
+            x: Math.random() * w, // Random initial x position
+            y: Math.random() * h, // Random initial y position
+            radius: r,
+            dx, 
+            dy, 
+            color: colors[Math.floor(Math.random() * colors.length)], // Random color
+            lineColor: "#ffffff",
+            mass: r * 2,
+            line: 150,
+            visible: true,
+          });
+        }
+       }else if (currentCount > expectedDots) {
+         dots.value.splice(expectedDots);
+         dots.value.forEach(dot => {
+          dot.x = Math.random() * w;
+          dot.y = Math.random() * h;
+        });
+       }
+
+      speedLimit.value = (w > h) ? h / w : w / h;
+    };
+
+    const drawDots = (ctx) => {
+      ctx.clearRect(0, 0, width.value, height.value);
+      for (const dot of dots.value) {
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
         ctx.fillStyle = dot.color;
@@ -56,78 +111,199 @@ export default {
       }
 
       // Draw cursor dot
-      ctx.beginPath();
-      ctx.arc(cursorDot.x, cursorDot.y, cursorDot.radius, 0, Math.PI * 2);
-      ctx.fillStyle = cursorDot.color;
-      ctx.fill();
-    }
+      if (cursorDot.value.visible) {
+        ctx.beginPath();
+        ctx.arc(cursorDot.value.x, cursorDot.value.y, cursorDot.value.radius, 0, Math.PI * 2);
+        ctx.fillStyle = cursorDot.value.color;
+        ctx.fill();
+      }
+    };
 
-    function updateDots() {
-      for (const dot of dots) {
+    const updateDots = () => {
+      for (const dot of dots.value) {
+        // Gravitate toward cursor if mouse is down
+        const d = getDistance(cursorDot.value.x, cursorDot.value.y, dot.x, dot.y);
+
+        if (d > 1 && cursorDot.value.visible && (isRightMouseDown.value || isLeftMouseDown.value) ) {
+          const fg = ((dot.mass * physics.mass[level.value]) / (d * d)) * physics.gravity[level.value];
+          dot.dx += (cursorDot.value.x < dot.x) ? -fg : fg;
+          dot.dy += (cursorDot.value.y < dot.y) ? -fg : fg;
+          dot.randomized = false; // Reset flag since mouse is down
+        }
+
+        // When mouse is released, assign random directions and speeds only once
+        if (!isRightMouseDown.value && !isLeftMouseDown.value && !dot.randomized && d <= 10) {
+          dot.randomized = true; // Mark as randomized
+          const angle = Math.random() * 2 * Math.PI; // Random angle
+          const speed = Math.random() * speedLimit.value; // Random speed
+          dot.dx = speed * Math.cos(angle); // Random x velocity
+          dot.dy = speed * Math.sin(angle); // Random y velocity
+        }
+
+        // Limit speed
+        const speed = Math.sqrt(dot.dx * dot.dx + dot.dy * dot.dy);
+        if (speed > physics.speed[level.value]) {
+          dot.dx = (dot.dx / speed) * physics.speed[level.value];
+          dot.dy = (dot.dy / speed) * physics.speed[level.value];
+        }
+
+        // Move dots at their velocity
         dot.x += dot.dx;
         dot.y += dot.dy;
 
-        if (dot.x < 0 || dot.x > width) dot.dx *= -1;
-        if (dot.y < 0 || dot.y > height) dot.dy *= -1;
-      }
-    }
+        // Bounce off walls
+        const w = window.innerWidth - 15;
+        const h = window.innerHeight;
 
-    function connectDots(ctx) {
-      for (let i = 0; i < dots.length; i++) {
-        for (let j = i + 1; j < dots.length; j++) {
-          const dx = dots[i].x - dots[j].x;
-          const dy = dots[i].y - dots[j].y;
+        if (dot.x < 0 || dot.x > w) dot.dx *= -1;
+        if (dot.y < 0 || dot.y > h) dot.dy *= -1;
+      }
+    };
+
+
+    const connectDots = (ctx) => {
+      for (let i = 0; i < dots.value.length; i++) {
+        for (let j = i + 1; j < dots.value.length; j++) {
+          const dx = dots.value[i].x - dots.value[j].x;
+          const dy = dots.value[i].y - dots.value[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < 150) {
             ctx.beginPath();
-            ctx.moveTo(dots[i].x, dots[i].y);
-            ctx.lineTo(dots[j].x, dots[j].y);
+            ctx.moveTo(dots.value[i].x, dots.value[i].y);
+            ctx.lineTo(dots.value[j].x, dots.value[j].y);
             ctx.strokeStyle = "rgba(81, 162, 233, 0.2)";
             ctx.stroke();
           }
         }
 
         // Connect cursor dot to others
-        const dx = dots[i].x - cursorDot.x;
-        const dy = dots[i].y - cursorDot.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 200) {
-          ctx.beginPath();
-          ctx.moveTo(dots[i].x, dots[i].y);
-          ctx.lineTo(cursorDot.x, cursorDot.y);
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
-          ctx.stroke();
+        if (cursorDot.value.visible){
+          const dx = dots.value[i].x - cursorDot.value.x;
+          const dy = dots.value[i].y - cursorDot.value.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+  
+          if (distance < physics.radius[level.value]){
+            ctx.beginPath();
+            ctx.moveTo(dots.value[i].x, dots.value[i].y);
+            ctx.lineTo(cursorDot.value.x, cursorDot.value.y);
+            ctx.strokeStyle = "rgba(81, 162, 233, 0.6)";
+            ctx.stroke();
+          }
         }
       }
-    }
+    };
 
-    function animate() {
-      drawDots(ctx1);
-      drawDots(ctx2);
-      updateDots();
-      connectDots(ctx1);
-      connectDots(ctx2);
-      requestAnimationFrame(animate);
-    }
+    const render = () => {
+      ctx1.value = canvas1.value?.getContext("2d");
+      ctx2.value = canvas2.value?.getContext("2d");
+      
+      if (ctx1.value && ctx2.value) {
+        drawDots(ctx1.value);
+        drawDots(ctx2.value);
+        updateDots();
+        connectDots(ctx1.value);
+        connectDots(ctx2.value);
+      }
+      requestAnimationFrame(render);
+    };
 
-    window.addEventListener("mousemove", (e) => {
-      cursorDot.x = e.clientX;
-      cursorDot.y = e.clientY;
+    const onMouseDown = (e) => {
+      if (e.button === 0) isLeftMouseDown.value = true;
+      else if (e.button === 2) isRightMouseDown.value = true;
+      else return;
+
+      if(level.value <=2) level.value++;
+    };
+
+    const onMouseUp = (e) => {
+      if (e.button === 0 && isLeftMouseDown.value) isLeftMouseDown.value = false;
+      else if (e.button === 2 && isRightMouseDown.value) isRightMouseDown.value = false;
+      else return;
+
+      if (level.value > 0) level.value--;
+    };
+
+    const onMouseMove = (e) => {
+      cursorDot.value.x = e.offsetX;
+      cursorDot.value.y = e.offsetY;
+      cursorDot.value.visible = true;
+    };
+
+    const onMouseLeave = () => {
+      isLeftMouseDown.value = false;
+      isRightMouseDown.value = false;
+      cursorDot.value.visible = false; // Hide the cursor dot when the mouse leaves the canvas 
+      level.value = 0;
+    };
+    
+    const preventZoom = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+      }
+    };
+
+    const contextMenu = (e) => {
+      e.preventDefault();
+    };
+
+    onMounted(() => {
+      resizeCanvas();
+
+      if (canvas1.value) {
+        canvas1.value.addEventListener("mousemove", onMouseMove);
+        canvas1.value.addEventListener("mouseleave", onMouseLeave);
+        canvas1.value.addEventListener("mousedown", onMouseDown);
+        canvas1.value.addEventListener("mouseup", onMouseUp);
+        canvas1.value.addEventListener('wheel', preventZoom, {passive: false});
+        canvas1.value.addEventListener('contextmenu', contextMenu);
+      }
+      if (canvas2.value) {
+        canvas2.value.addEventListener("mousemove", onMouseMove);
+        canvas2.value.addEventListener("mouseleave", onMouseLeave);
+        canvas2.value.addEventListener("mousedown", onMouseDown);
+        canvas2.value.addEventListener("mouseup", onMouseUp);
+        canvas2.value.addEventListener('contextmenu', contextMenu);
+        canvas2.value.addEventListener('wheel', preventZoom, {passive: false});
+      }
+      window.addEventListener("resize", resizeCanvas); 
+      render();
     });
 
-    createDots();
-    animate();
-  },
-};
+    onBeforeUnmount(() => {
+      if (canvas1.value) {
+        canvas1.value.removeEventListener("mousemove", onMouseMove);
+        canvas1.value.removeEventListener("mouseleave", onMouseLeave);
+        canvas1.value.removeEventListener("mousedown", onMouseDown);
+        canvas1.value.removeEventListener("mouseup", onMouseUp);
+        canvas1.value.removeEventListener('contextmenu', contextMenu);
+        canvas1.value.removeEventListener('wheel', preventZoom);
+      }
+      if (canvas2.value){
+        canvas2.value.removeEventListener("mousemove", onMouseMove);
+        canvas2.value.removeEventListener("mouseleave", onMouseLeave);
+        canvas2.value.removeEventListener("mousedown", onMouseDown);
+        canvas2.value.removeEventListener("mouseup", onMouseUp);
+        canvas2.value.removeEventListener('contextmenu', contextMenu);
+        canvas2.value.removeEventListener('wheel', preventZoom);
+      }
+      window.removeEventListener("resize", resizeCanvas);
+    });
+
+    return {
+      canvas1,
+      canvas2,
+      title
+    };
+  }
+}
 </script>
 
 <style>
 
 .dots {
   width: 100%;
-  background: var(--primary-background);
+  background: #020f19;
 }
 .canvas{
     position: relative;
@@ -135,7 +311,7 @@ export default {
     opacity: 1;
     z-index: 0;
 }
-.connecting-dots {
+.canvas-1{
   display: block;
   position:absolute;
   width:100%;
@@ -151,15 +327,24 @@ export default {
     width: 100%;
     text-align: center;
     vertical-align: middle;
-    display: inline-flex;
     justify-content: center;
+    flex-direction: column;
     align-items: center;
-    margin: auto;
     height: 100vh;
     position: relative;
-    z-index: 999;
     top: 0;
     user-select: none;
+    align-self: center;
+    justify-self: center;
+    display: flex;
+    line-height: normal;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 300;
+    z-index: 999;
+    row-gap:20px;
+    pointer-events: none;
+    color: var(--tiffany-blue);
 }
-
 </style>

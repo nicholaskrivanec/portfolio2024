@@ -4,17 +4,18 @@
         ,props: {
             path: { type: String, required: true },
             icon: { type: String, required: false },
+            label: { type: String, required: false },
             isActive: {type: Boolean, required: false, default: false}
         }
     }
 </script>
 
 <template>
-    <li class="nav-btn" :id="path">
-        <router-link :to="path" :class="nav-link">
-            <div class="wrapper">
+    <li class="nav-btn">
+        <router-link :to="path" :class="{'nav-link':true, 'tooltip':true}" :data-tooltip="label">
+            <div class="wrapper" :class="navLink">  
                 <span><fa-icon :icon="['fas', icon]" /></span>
-                <span class="nav-lbl row-1"><slot>Home</slot></span>
+                <span class="nav-lbl row-1"><slot>{{ label }}</slot></span>
             </div>
         </router-link>
     </li>
