@@ -1,8 +1,6 @@
 
 <template>
   <about/>
-  <projects/>
-  <footer-area />
 </template>
 
 <script>

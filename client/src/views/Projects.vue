@@ -1,41 +1,41 @@
 <template>
-    <div class="github-viewer">
-      <!-- Profile Section -->
-      <div class="input-form">
-        <form @submit.prevent="fetchRepos">
-          <input
-            type="text"
-            v-model="githubUrl"
-            placeholder="Enter GitHub Profile URL or username"
-            required
-          />
-          <button type="submit">
-            <fa-icon :icon="['fab', 'github']" class="fa-lg git-link" />Projects
-          </button>
-        </form>
-      </div>
-      <div v-if="profile" class="profile-section">
-        <img :src="profile.avatar" alt="User Avatar" class="user-avatar" />
-        <h3>{{ profile.name }}</h3>
-        <p>{{ profile.bio }}</p>
-        <p><strong>Location:</strong> {{ profile.location }}</p>
-        <p>
-          <strong>Public Repos:</strong> {{ profile.public_repos }} |
-          <strong>Followers:</strong> {{ profile.followers }} |
-          <strong>Following:</strong> {{ profile.following }}
-        </p>
-      </div>
-  
-      
-  
-      <div v-if="error" class="error">{{ error }}</div>
-  
-      <div class="container card" v-if="repositories.rows && repositories.rows.length">
-        <detail-rows :data="repositories" />
-      </div>
-      <p v-else-if="submitted && !repositories.rows.length">No repositories found.</p>
+  <div class="github-viewer">
+    <!-- Profile Section -->
+    <div class="input-form">
+      <form @submit.prevent="fetchRepos">
+        <input
+          type="text"
+          v-model="githubUrl"
+          placeholder="Enter GitHub Profile URL or username"
+          required
+        />
+        <button type="submit">
+          <fa-icon :icon="['fab', 'github']" class="fa-lg git-link" />Projects
+        </button>
+      </form>
     </div>
-  </template>
+    <div v-if="profile" class="profile-section">
+      <img :src="profile.avatar" alt="User Avatar" class="user-avatar" />
+      <h3>{{ profile.name }}</h3>
+      <p>{{ profile.bio }}</p>
+      <p><strong>Location:</strong> {{ profile.location }}</p>
+      <p>
+        <strong>Public Repos:</strong> {{ profile.public_repos }} |
+        <strong>Followers:</strong> {{ profile.followers }} |
+        <strong>Following:</strong> {{ profile.following }}
+      </p>
+    </div>
+
+  
+    <div v-if="error" class="error">{{ error }}</div>
+    <detail-rows 
+      :class="['projects']" 
+      :data="repositories" 
+      @update-rows="updateRepositoriesRows" 
+      v-if="repositories.rows && repositories.rows.length"/>
+    <p v-else-if="submitted && !repositories.rows.length">User profile not found.</p>
+  </div>
+</template>
 
 <script>
 import { ref, computed, onMounted, nextTick } from "vue";
@@ -49,33 +49,24 @@ export default {
     const submitted = ref(false);
     const gitStore = useGitHubStore();
     const userStore = useUserStore();
-
     const showIcons = computed(() => userStore.iconMode);
 
     const repositories = computed(() => {
       return {
         headers: [
           { value: "Repository", class: "col-1", icon: null, html: null },
-          { value: "URL", class: "col-2", icon: null, html: null },
           { value: "Language", class: "col-3", icon: null, html: null },
         ],
         rows: gitStore.repositories.map((repo) => ({
           cols: [
-            { value: repo.name, class: "projects col-1", icon: null, html: null },
-            {
-              value: null,
-              class: "projects col-2",
-              icon: null,
-              html: `<a href="${repo.html_url}" class="tooltip" target="_blank">
-                       View on GitHub
-                     </a>`,
-            },
-            {
+            { 
+              value: repo.name, class: "col-1", icon: null, html: null 
+            },{
               value: repo.language || "Unknown",
-              class: "projects col-3",
+              class: "col-3",
               icon: null,
               html: showIcons.value
-                ? `<div class="code-icons col-3">
+                ? `<div class="code-icons">
                      <span class="${repo.icon || ""} tooltip" data-tooltip="${repo.language}"></span>
                    </div>`
                 : null,
@@ -84,17 +75,23 @@ export default {
           ],
           details: [
             {
-              value: repo.description || "No description provided.",
+              value: null,
               class: "details col-1",
               icon: null,
+              html: `<a href="${repo.html_url}" target="_blank">
+                ${repo.html_url}
+                </a>`,
+            }, {
+              value: repo.description || "No description provided.",
+              class: "details col-2",
+              icon: null,
               html: null,
-            },
+            }
           ],
           isExpanded: false,
         })),
       };
     });
-
     const profile = computed(() => gitStore.profile);
     const error = computed(() => gitStore.error);
 
@@ -113,7 +110,11 @@ export default {
       const match = url.match(/github\.com\/([\w-]+)/);
       return match ? match[1] : url;
     };
-
+    
+    const updateRepositoriesRows = (sortedRows) => {
+      repositories.value.rows = sortedRows;
+    };
+    
     onMounted(() => {
       emit("view-loaded");
       nextTick(() => {
@@ -246,4 +247,5 @@ h2 {
 .git-link {
     padding-right: 6px;
 }
+
 </style>

@@ -12,13 +12,14 @@
                 <span v-else>{{ col.value }}</span>
             </span>
         </summary>
-        <div v-for="(detail, index) in details" :key="index" :class="[detail.class]">
-            <fa-icon v-if="detail.icon" :icon="[detail.icon]" />
-            <span v-if="detail.html" v-html="detail.html"></span>
-            <span v-else>{{ detail.value }}</span>
+        <div class="detail-values">
+            <div v-for="(detail, index) in details" :key="index" :class="[detail.class]">
+                <div v-if="detail.icon"><fa-icon :icon="[detail.icon]" /></div>
+                <div v-if="detail.html" v-html="detail.html"></div>
+                <div v-else>{{ detail.value }}</div>
+            </div>
         </div>
-        <hr v-if="!lastRow" />
-        <br v-if="lastRow" />
+        <br />
     </details>
 </template>
 
@@ -62,98 +63,180 @@ export default defineComponent({
 </script>
 
 <style>
+details{ border-radius: 6px; }
+details[open] { background-color: var(--detail-row-open); }
+
+.detail-rows .container {
+    margin: 0;
+    padding: 0;
+    border: solid 1px transparent;
+}
+
+details[open]:hover {
+    border-left: solid 1px var(--hover-text);
+    border-top: solid 1px var(--tiffany-blue);
+    border-right: solid 1px var(--hover-text);
+    border-bottom: solid 1px var(--hover-text);
+    border-radius: 0 0 6px 6px;
+    background-color: var(--detail-row-hover);
+    -webkit-user-select: none;
+    user-select: none;
+    transition: .3s;
+}
+details[open] summary:hover,
+details[open] summary:hover .col-1  {
+    background-color: transparent;
+    color: var(--hover-text);
+    opacity: 1 !important;
+    user-select: none;
+}
+
+.details.col-1 { margin: 0; }
+.detail-values { width: 100%; }
+.col-1 { text-align: left; }
+.col-2 { text-align: center; }
+.col-3 { text-align: right; }
 
 summary {
     display: flex;
-    width: 100%;
-    align-items: center;
     flex-direction: row;
     justify-content: space-between;
     cursor: pointer;
-    padding: 0 8px;
-    margin-left: -10px;
-    border: solid 2px transparent;
-    border-radius: 10px;
+    border: solid 1px transparent;
     color: var(--grey-text);
-    --icon-height: 33px;
 }
 
 summary:hover,
 summary:hover i.fa-solid,
 summary:hover .text-teal,
-summary:hover .opacity {
-    background-color: var(--hover-background);
+summary:hover .opacity, 
+.about summary:hover,
+.about summary:hover i.fa-solid,
+.about summary:hover .text-teal,
+.about summary:hover .opacity, 
+.projects summary:hover,
+.projects summary:hover i.fa-solid,
+.projects summary:hover .text-teal,
+.projects summary:hover .opacity 
+{
+    background-color: var(--detail-row-hover);
     color: var(--hover-text);
     opacity: 1 !important;
     -webkit-user-select: none;
+    border-radius: 0 0 6px 6px; ;
     user-select: none;
     transition: .3s;
 }
 
-.details.col-1 {
+/*** ABOUT VIEW ***/
+.about summary {
     display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: calc(100% - 46px);
-}
-
-.details.col-1:before {
-    content: "Description: ";
-    opacity: 0.6;
-    margin: 0 46px;
-}
-.col-2 {
-    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    font-size: 11pt;
-    font-weight: normal;
-    opacity: 0.8;
-
+    cursor: pointer;
+    border: solid 1px transparent;
+    border-radius: 6px;
+    color: var(--grey-text);
 }
 
-details h5.col-3 {
-    font-family: Roboto, sans-serif, Segoe UI, Arial;
+.about .col-2 {
     text-align: center;
-    font-size: 13pt;
-    margin: 0;
-    font-weight: bold;
-}
-.projects.col-1, .projects.col-2, .projects.col-3 {
-    font-family: Roboto,sans-serif,Segoe UI,Arial;
-    display: inline-block;
-    width: 33%;
-    vertical-align: middle;
-    font-weight: 700;
-    height: 100%;
-}
-.about.col-1, .about.col-2, .about.col-3 {
-    font-family: Roboto,sans-serif,Segoe UI,Arial;
-    vertical-align: middle;
-    font-weight: 700;
-    height: 100%;
+    font-size: 16px;
+    opacity: 0.8;
 }
 
-.about.col-2 {
-    margin-bottom:8px;
+.about .details {
+  padding: 0px 8px 0px 8px;
+  opacity: 0.8;
 }
-.col-1 {
+
+.about.card, 
+.about .card{
+  box-shadow: none;
+}
+.about .header-row .col-1 { opacity: 0.8; }
+.about .header-row .col-3 { opacity:0.8; } 
+.about .col-1 { margin:10px; }
+.about .col-2 { margin:0 0 8px 0; }
+.about .col-3 { margin-right: 16px; }
+
+.about.col-1,
+.about.col-2,
+.about.col-3 {
+    font-family: Roboto, sans-serif, Segoe UI, Arial;
+    vertical-align: middle;
+    font-weight: 700;
+    height: 100%;
+}
+.about .details.col-2 div, 
+.about .details.col-1 div {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+
+/** PROJECTS VIEW **/
+.projects .details.col-2 div, 
+.projects .details.col-1 div {
+    -webkit-user-select: text;
+    user-select: text;
+    padding-left: 20px;
+    width: 100%;
     text-align: left;
 }
-.col-2 {
-    text-align: center;
+
+.projects a {
+    color: inherit;
+    background-color: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: .3s;
 }
-.col-3{
-    text-align: right;
+.projects a:hover { color: var(--hover-text); }
+
+.projects .code-icons{ margin-right: 15px; }
+
+.projects summary {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border: solid 1px transparent;
+  border-radius: 6px 0 0 6px;
+  color: var(--grey-text);
+  min-width: 320px;
 }
-span.js-icon.tooltip {
-    background-size: 33px !important;
+.projects span.js-icon.tooltip { background-size: 28px !important; }
+
+.projects .details.col-1 div:before {
+    content: "Source Code:";
+    text-indent: 0px;
+    margin-top: 0px;
+    padding-right: 10px;
+    opacity:0.8;
 }
-.col-2 span {
-    text-align: center;
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
+.projects .details.col-2 div:before {
+    content: "Description:";
+    text-indent: 0px;
+    margin-top: 0px;
+    padding-right: 10px;
+    opacity:0.8;
 }
+
+.projects summary .col-1,
+.projects summary .col-3,
+.projects .header-row .col-1,
+.projects .header-row .col-3 {
+  font-family: Roboto,sans-serif,Segoe UI,Arial;
+  width: 50%;
+  margin: 0;
+  padding:0;
+}
+
+.projects summary .col-1 { margin:10px;}
+.projects summary .col-2 { margin:0 0 8px 0; }
+.projects summary .col-3 { margin-right: 16px; }
+.projects .details.col-2 { padding-right: 100px; }
 </style>

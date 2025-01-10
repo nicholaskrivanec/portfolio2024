@@ -5,6 +5,7 @@
         <preloader :label="path" loadType="dots" />
       </div>
     </transition>
+
     <div class="scrollbar-y body-scroll-area" v-show="!isLoading">
       <menu-bar :includeIconSwitch="includeIconSwitch" :includeColorSwitch="includeColorSwitch"
         @toggle-icons="toggleIcons" @toggle-colors="toggleColors" :showTitleArea="showTitleArea" :id="menu" />
@@ -14,7 +15,8 @@
           <component :is="Component" :key="route.fullPath" :id="main" />
         </keep-alive>
       </router-view>
-
+      
+      <footer-area />
     </div>
   </div>
 </template>
@@ -85,6 +87,13 @@ export default {
         console.log('from:', from.value, 'to:', to.value);
     });
 
+    const isMobileDevice = computed(() => {
+      const userAgentCheck = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const touchCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const widthCheck = window.innerWidth <= 768;
+
+      return userAgentCheck || touchCheck || widthCheck;
+    });
     onMounted(() => {
       loadingStore.startLoading();
       isLoading.value = true;
@@ -99,7 +108,8 @@ export default {
       handleViewLoaded,
       showTitleArea,
       path,
-      slideDirection
+      slideDirection,
+      isMobileDevice
     };
   },
 };
@@ -299,5 +309,8 @@ body.no-scroll {
   }
 }
 
+.body-scroll-area {
+  transform-origin: top left;
+}
 
 </style>

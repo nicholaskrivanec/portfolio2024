@@ -67,16 +67,16 @@
           </div>
         </div>
 
-        <div class="container card">
+        <div class="container card details">
           <h2 class="header-icon">
             <fa-icon :icon="['fas', 'fa-mug-saucer']" class="fa-fw" />Work Experience
           </h2>
-          <detail-rows :data="workExperience" :onToggleAll="updateHeights" />
+          <detail-rows :class="['about']" :data="workExperience" :onToggleAll="updateHeights" />
         </div>
 
-        <div class="container card">
+        <div class="container card details">
           <h2 class="header-icon"><fa-icon :icon="['fas', 'fa-graduation-cap']" class="fa-fw" />Education</h2>
-          <detail-rows :data="education" :onToggleAll="updateHeights" />
+          <detail-rows :class="['about']" :data="education" :onToggleAll="updateHeights" />
         </div>
         <div style="clear:both;"></div>
       </section>
@@ -179,48 +179,48 @@ export default {
         rows: [
           {
             cols: [
-              { value: 'Annotation Specialist', class: 'about col-1', icon: null, html: null },
+              { value: 'Annotation Specialist', class: 'col-1', icon: null, html: null },
               { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value: 'current', class: 'about col-3', icon: 'fa-calendar-days', html: null }
+              { value: 'current', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [
-              { value: 'DataAnnotation',  class: 'about col-2', icon:null, html: null },
+              { value: 'DataAnnotation',  class: 'col-2', icon:null, html: null },
               { value: 'Trained and assisted AI models in coding, cataloging and evaluating over 50,000 lines of code and text data to reduce generation errors across Python, C#, Java, and JavaScript models.', class: 'details', icon:null, html: null  }
             ],
             isExpanded: false,
             onToggle: updateHeights
           }, {
             cols: [
-              { value: 'Web Developer III', class: 'about col-1', icon: null, html: null },
+              { value: 'Web Developer III', class: 'col-1', icon: null, html: null },
               { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value: '2019 - 2024', class: 'about col-3', icon: 'fa-calendar-days', html: null }
+              { value: '2019 - 2024', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [
-              {value: 'Justice Works', class: 'about col-2', icon:null, html: null  },
+              {value: 'Justice Works', class: 'col-2', icon:null, html: null  },
               {value: 'Led the development of case management systems serving over 1,000 users, focusing on scalability and user experience. Mentored junior developers to improve code quality and development practices. Spearheaded over 5 full-stack ASP.NET projects, incorporating custom C# libraries, API creation and integration, database management with automated jobs, and web services. Also developed a messaging platform tailored for legal communications.', class: 'details', icon:null, html: null  },
             ],
             isExpanded: false,
             onToggle: updateHeights
           }, {
             cols: [
-              { value: 'Test Administrator', class: 'about col-1', icon: null, html: null },
+              { value: 'Test Administrator', class: 'col-1', icon: null, html: null },
               { value: ' ', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value: '2018 - 2019', class: 'about col-3', icon: 'fa-calendar-days', html: null }
+              { value: '2018 - 2019', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [
-              { value: 'Pearson Vue', class: 'about col-2',   icon:null, html: null,  },
+              { value: 'Pearson Vue', class: 'col-2',   icon:null, html: null,  },
               { value: 'Administered 800+ high-stakes exams for thousands of candidates, maintaining full compliance with Pearson VUE protocols and achieving a flawless security record. Managed and troubleshooted 15+ desktops, ensuring seamless testing operations and swift issue resolution.', class: 'details', icon:null, html: null,  }
             ],
             isExpanded: false,
             onToggle: updateHeights
           }, {
             cols: [
-              { value: 'Driver / Package Handler', class: 'about col-1', icon: null, html: null },
+              { value: 'Driver / Package Handler', class: 'col-1', icon: null, html: null },
               { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value: '2014 - 2018', class: 'about col-3', icon: 'fa-calendar-days', html: null }
+              { value: '2014 - 2018', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [
-              { value: 'UPS', class: 'about col-2', icon:null, html: null  },
+              { value: 'UPS', class: 'col-2', icon:null, html: null  },
               { value: 'Maintained a misload frequency of 1 in 11,000, earning Employee of the Month for perfect attendance, and achieved 100% accuracy in on-time deliveries to residents and businesses.', class: 'details', icon:null, html: null}
             ],
             isExpanded: false,
@@ -238,7 +238,7 @@ export default {
           {
             cols: [
               {
-                value: 'Weber State University', class: 'about col-1', icon: null, html: `<svg class="wsulogo" version="1.1" xmlns="http://www.w3.org/2000/svg" 
+                value: 'Weber State University', class: 'col-1', icon: null, html: `<svg class="wsulogo" version="1.1" xmlns="http://www.w3.org/2000/svg" 
                     width="40px" height="22px" viewBox="0 0 54.9 76.7" xml:space="preserve">
                     <path fill="#4A0D66" d="M54.9,20.8V0H0v21c0,39.5,27.4,55.7,27.4,55.7l0,0c0,0,27.6-15.2,27.4-55.8V20.8z" />
                     <path fill="#FFFFFF" d="M39.6,17.4c-3.9-5.1-3.2-7.4-3.2-7.4s-2.1,3.7-3.1,6.8c-1.3,3.7,1.2,7.6,1.2,7.6l4.3,6.2
@@ -248,9 +248,19 @@ export default {
                     c0.1-0.2,0.7-2,0.7-2l6.8-19.5C46.9,25.1,42.7,21.5,39.6,17.4z" />
                     </svg>`},
               { value:'', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value:'2015 - 2019', class: 'about col-3', icon: 'fa-calendar-days', html: null }
+              { value:'2015 - 2019', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
-            details: [{ value: 'Associate of Science, Computer Science', class: 'about details', icon: null, html: null }],
+            details: [{ value: 'Associate of Science, Computer Science', class: 'details', icon: null, html: null }],
+            isExpanded: false,
+            onToggle: updateHeights
+          },
+          {
+            cols: [
+              { value: 'Woods Cross High', class: 'col-1', icon: null, html: null },
+              { value:'', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
+              { value:'2004 - 2007', class: 'col-3', icon: 'fa-calendar-days', html: null }
+            ],
+            details: [{ value: 'High School Diploma', class: 'details', icon: null, html: null }],
             isExpanded: false,
             onToggle: updateHeights
           }
@@ -265,5 +275,15 @@ export default {
 <style scoped>
 .wsulogo {
   vertical-align: middle;
+}
+.about .card{
+  box-shadow: none;
+}
+.container.card.details {
+  padding:0px;
+}
+.container.card.details .header-icon {
+    color: var(--icon-header-text);
+    padding-left: 8px;
 }
 </style>

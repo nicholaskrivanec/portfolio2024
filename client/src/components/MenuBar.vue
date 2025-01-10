@@ -1,6 +1,6 @@
 
 <template>
-    <div v-show="showTitleArea" class="title-area">
+    <div v-show="showTitleArea" class="title-area" >
       <dots>
         <div class="from-left">Hello World!</div>
         <div class="from-right">I'm Nick.</div>
@@ -13,7 +13,13 @@
         </div>
       </dots>
     </div>
-    <header class="menu-bar scrollbar-x" id="headerMenu">
+    <header 
+      class="menu-bar scrollbar-x" 
+      id="headerMenu"
+      @wheel.prevent
+      @gesturestart.prevent
+      @gesturechange.prevent
+      @gestureend.prevent>
       <div class="menu-content">
         <ul class="nav-buttons tabs">
           <nav-button path="/" is-active="true" icon="home" label="Home"></nav-button>
@@ -101,21 +107,20 @@ export default {
     box-shadow: inset -1px -5px 16px -13px var(--menu-shine);
     border-top: none;
     border-bottom: solid 1px var(--menu-border);
-    overflow-y: hidden;
     position:sticky;
     top:0;
     z-index: 10;
+    transform: scale(1); /* Prevent scaling */
+    transform-origin: top left; /* Prevent unwanted scaling effects */
 }
 
 .menu-content {
     display: inline-flex;
-	  height:100%;
-    width: 100%;
+    width: calc(100% - 15px);
     justify-content: space-between;
     align-items: flex-end;
-	flex-wrap:nowrap;
+    flex-wrap: nowrap;
 }
-
 ul.nav-buttons{
     display: inline-flex;
     align-items: flex-end;

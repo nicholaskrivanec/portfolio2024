@@ -90,6 +90,15 @@
   --tide-dark-blue: #274472;
   --tide-midnight-blue: #41729f;
   --tiffany-blue: #92cfcd;
+  --detail-rows-header:  #0b1d2ba8;
+  --detail-rows-header-text: #ffffff;
+  --detail-row-open: #6c767e1c;
+  --detail-row-open-text: #000;
+  --detail-row-hover: #009688;
+  --detail-row-hover-text: #0b304b;
+  --detail-row: #38444d;
+  --detail-row-text: #ffffff;
+  
 }
 
 
@@ -132,6 +141,14 @@ body.dark-mode {
   --status-bar-background: #1f252a;
   --status-bar-fill: #009688;
   --status-bar-text: #38444d;
+  --detail-rows-header:  #0b1d2ba8;
+  --detail-rows-header-text: #ffffff;
+  --detail-row-open: #6c767e8c;
+  --detail-row-hover: #1f2a33;
+  --detail-row-hover-text: #79c0ff;
+  --detail-row-open-text: #fff;
+  --detail-row: #38444d;
+  --detail-row-text: #ffffff;
 }
 html, body {
   overflow: visible; /* Ensure sticky can calculate position */
@@ -367,7 +384,39 @@ span.dl-text {
     visibility: hidden;
   }
 }
-@media (max-width: 601px) {
+@media (min-width: 0px) and (max-width: 420px) {
+ h5 {
+  font-size:9pt;
+ }
+ .about .col-3 {
+  font-size: 9pt;
+}
+ .menu-togglers {
+  min-height: 50px;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-direction: column;
+  column-gap: 2px;
+  flex-wrap: nowrap;
+  margin: 8px 10px 0px 0px;
+}
+.nav-lbl {
+  display: none;
+}
+.nav-link.tooltip:hover:after {
+  visibility: visible;
+}
+.wrapper {
+  font-size: 26px;
+}
+
+.fib-svg-container {
+    width: 97vw;
+    height: calc(100vh - 141px);
+    margin: 37px auto;
+}
+}
+@media (min-width: 601px) {
     .menu-togglers {
       min-height: 50px;
       align-items: flex-end;
@@ -385,6 +434,12 @@ span.dl-text {
     }
     .wrapper {
       font-size: 26px;
+    }
+
+    .fib-svg-container {
+        width: 97vw;
+        height: calc(100vh - 141px);
+        margin: 37px auto;
     }
 }
 @media (min-width: 601px) and (max-width: 850px) {
@@ -483,4 +538,22 @@ summary:hover h5 svg.svg-inline--fa.fa-caret-down.fa-fw.margin-right {
   color: var(--hover-text);
 }
 
+.github-viewer .code-icons span {
+  background-size: 32px;
+  height:33px;
+  width:33px;
+  padding:0;
+  margin:0;
+}
 
+.github-viewer .code-icons span.ps-icon.tooltip { background-size: 57px; }
+.github-viewer .code-icons span.csharp-icon.tooltip { background-size: 33px; }
+.github-viewer .code-icons span.python-icon.tooltip { 
+  background-size: 28px; 
+  position:relative; 
+  top: 4px; 
+}
+
+.container.card {
+  border-radius: 5px;
+}
