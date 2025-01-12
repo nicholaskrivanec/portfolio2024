@@ -54,6 +54,7 @@ export default {
       default: null,
     },
   },
+
   setup(props, { emit }) {
     const sortedColumn = ref(null); // Tracks currently sorted column index
     const sortOrder = ref("asc");   // Tracks sort order (asc/desc)
@@ -88,8 +89,8 @@ export default {
       if (sortedColumn.value === null) return props.data;
 
       const compare = (a, b) => {
-        const valueA = a.cols[sortedColumn.value].value || ""; 
-        const valueB = b.cols[sortedColumn.value].value || "";
+        const valueA = (a.cols[sortedColumn.value].value || "").toString().toLowerCase();
+        const valueB = (b.cols[sortedColumn.value].value || "").toString().toLowerCase();
 
         if (valueA < valueB) return sortOrder.value === "asc" ? -1 : 1;
         if (valueA > valueB) return sortOrder.value === "asc" ? 1 : -1;
@@ -151,13 +152,6 @@ export default {
     width: 100%;
     line-height: di;
 }
-.projects .code-icons {
-  background-size: 30px;
-  margin-right: 15px;
-  margin-top: 0;
-  position: relative;
-  top: 6px;
-}
 
 details.container {
   margin: 0px 0px 0px 0px;
@@ -191,8 +185,8 @@ details.container {
     padding-right: 20px;
 }
 
-svg.svg-inline--fa.fa-fw:hover {
-    color: deepskyblue;
+.header-row.card svg.svg-inline--fa.fa-fw:hover {
+    color: var(--hover-text);
 }
 
 </style>
