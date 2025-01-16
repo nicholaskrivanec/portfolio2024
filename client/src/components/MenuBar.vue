@@ -15,16 +15,13 @@
     </div>
     <header 
       class="menu-bar scrollbar-x" 
-      id="headerMenu"
-      @wheel.prevent
-      @gesturestart.prevent
-      @gesturechange.prevent
-      @gestureend.prevent>
+      id="headerMenu">
       <div class="menu-content">
         <ul class="nav-buttons tabs">
           <nav-button path="/" is-active="true" icon="home" label="Home"></nav-button>
           <nav-button path="/projects" icon="laptop-code" label="Projects"></nav-button>
           <nav-button path="/sandbox" icon="truck-monster" label="Sandbox"></nav-button>
+          <nav-button path="/three" icon="cat" label="Three JS"></nav-button>
         </ul>
   
         <div class="menu-togglers">
@@ -117,6 +114,7 @@ export default {
 .menu-content {
     display: inline-flex;
     width: calc(100% - 15px);
+    height: calc(100% - 1px);
     justify-content: space-between;
     align-items: flex-end;
     flex-wrap: nowrap;
@@ -128,7 +126,8 @@ ul.nav-buttons{
     margin-bottom: -1px;
     gap: 2px;
     list-style: none;
-	padding-left:8px;
+	  padding-left:8px;
+    height:60px;
 }
 
 .from-left, .from-right {

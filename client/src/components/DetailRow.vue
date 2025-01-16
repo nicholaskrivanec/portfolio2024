@@ -7,14 +7,14 @@
                 {{ cols[0]?.value }}
             </h5>
             <span v-for="(col, index) in cols.slice(1)" :key="index" :class="col.class">
-                <fa-icon v-if="col.icon" :icon="[col.icon]" />
+                <fa-icon v-show="col.icon" :icon="[col.icon]" />
                 <span v-if="col.html" v-html="col.html"></span>
                 <span v-else>{{ col.value }}</span>
             </span>
         </summary>
         <div class="detail-values">
             <div v-for="(detail, index) in details" :key="index" :class="[detail.class]">
-                <div v-if="detail.icon"><fa-icon :icon="[detail.icon]" /></div>
+                <div v-show="detail.icon"><fa-icon :icon="[detail.icon]" /></div>
                 <div v-if="detail.html" v-html="detail.html"></div>
                 <div v-else>{{ detail.value }}</div>
             </div>
@@ -77,7 +77,6 @@ details[open]:hover {
     border-top: solid 1px var(--tiffany-blue);
     border-right: solid 1px var(--hover-text);
     border-bottom: solid 1px var(--hover-text);
-    border-radius: 0 0 6px 6px;
     background-color: var(--detail-row-hover);
     -webkit-user-select: none;
     user-select: none;
@@ -123,7 +122,6 @@ summary:hover .opacity,
     color: var(--hover-text);
     opacity: 1 !important;
     -webkit-user-select: none;
-    border-radius: 0 0 6px 6px; ;
     user-select: none;
     transition: .3s;
 }
@@ -157,7 +155,7 @@ summary:hover .opacity,
 }
 .about .header-row .col-1 { opacity: 0.8; }
 .about .header-row .col-3 { opacity:0.8; } 
-.about .col-1 { margin:10px; }
+.about .col-1 { margin-left: 10px; }
 .about .col-2 { margin:0 0 8px 0; }
 .about .col-3 { margin-right: 16px; }
 
@@ -174,7 +172,9 @@ summary:hover .opacity,
     -webkit-user-select: text;
     user-select: text;
 }
-
+.header-row svg.svg-inline--fa.fa-fw {
+    margin-right: 12px;
+}
 
 /** PROJECTS VIEW **/
 .projects .details.col-2 div, 
@@ -204,7 +204,6 @@ summary:hover .opacity,
   justify-content: space-between;
   cursor: pointer;
   border: solid 1px transparent;
-  border-radius: 6px 0 0 6px;
   color: var(--grey-text);
   min-width: 320px;
 }

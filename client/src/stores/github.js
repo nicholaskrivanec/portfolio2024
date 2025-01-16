@@ -7,12 +7,13 @@ export const useGitHubStore = defineStore('github', {
     activity: [],
     pofile: null,
     error: null,
-    request: null,
+    requestrepos: null,
+    requestuser: null,
   }),
   actions: {
     async fetchRepositories(username) {
-      if(username === this.request && this.repositories.length > 0) return;
-      this.request = username;
+      if(username === this.requestrepos && this.repositories.length > 0) return;
+      this.requestrepos = username;
       this.error = null;
       this.repositories = [];
 
@@ -48,8 +49,8 @@ export const useGitHubStore = defineStore('github', {
     },
 
     async fetchUserProfile(username) {
-      if (username === this.request && this.profile) return;
-      this.request = username;
+      if (username === this.requestuser && this.profile) return;
+      this.requestuser = username;
       this.error = null;
       this.profile = null;
 
@@ -72,8 +73,6 @@ export const useGitHubStore = defineStore('github', {
     },
 
     async fetchUserActivity(username) {
-      if(username === this.request && this.activity.length > 0) return;
-      this.request = username;
       this.error = null;
       this.activity = [];
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition :name="slideDirection">
+    <transition name="slide-left">
       <div class="preloader" v-show="isLoading">
         <preloader :label="path" loadType="dots" />
       </div>
@@ -22,9 +22,9 @@
 </template>
 
 <script>
-import { computed, ref, watch, nextTick, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { computed, ref, watch, onMounted } from 'vue';
 import { useLoadingStore } from './stores/loading';
+import { useRoute } from 'vue-router';
 import router from './router';
 
 export default {
@@ -38,10 +38,6 @@ export default {
     const path = computed(() => route.path);
     const from = ref('/');
     const to = ref('/');
-    const paths = {'/':0,'/projects':1, '/sandbox':2};
-    const slideDirection = computed(() => {
-      return paths[to.value] > paths[from.value] ? 'slide-left' : 'slide-left';
-    });
 
     const cachedComponents = computed(() =>
       router.getRoutes()
@@ -78,13 +74,17 @@ export default {
           includeIconSwitch.value = false;
           includeColorSwitch.value = false;
           break;
+        case '/three':
+          showTitleArea.value = false;
+          includeIconSwitch.value = false;
+          includeColorSwitch.value = false;
+          break;
         default:
           showTitleArea.value = false;
           includeIconSwitch.value = true;
           includeColorSwitch.value = false;
           break;  
-        }
-        console.log('from:', from.value, 'to:', to.value);
+      }
     });
 
     const isMobileDevice = computed(() => {
@@ -94,10 +94,10 @@ export default {
 
       return userAgentCheck || touchCheck || widthCheck;
     });
+
     onMounted(() => {
       loadingStore.startLoading();
       isLoading.value = true;
-      
     });
 
     return {
@@ -108,7 +108,6 @@ export default {
       handleViewLoaded,
       showTitleArea,
       path,
-      slideDirection,
       isMobileDevice
     };
   },

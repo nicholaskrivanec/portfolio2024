@@ -140,7 +140,6 @@ export default {
     margin-left: 10px;
 }
 .projects a {
-    display: inline-block;
     color: inherit;
     background-color: transparent;
     text-decoration: none;
@@ -149,8 +148,6 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 100%;
-    line-height: di;
 }
 
 details.container {
@@ -169,7 +166,25 @@ details.container {
     cursor: pointer;
 }
 
-
+details[open]:hover {
+    border-left: solid 1px var(--hover-text);
+    border-top: solid 1px var(--tiffany-blue);
+    border-right: solid 1px var(--hover-text);
+    border-bottom: solid 1px var(--hover-text);
+    background-color: var(--detail-row-hover);
+    -webkit-user-select: none;
+    user-select: none;
+    color: white;
+    transition: 0s;
+}
+details.container[open]:hover summary {
+    color: var(--hover-text);
+}
+.projects details:hover .details.col-1 div:before,
+.projects details:hover .details.col-2 div:before{
+    opacity: 1;
+    color: white;
+}
 .projects .header-row {
     display: flex;
     align-items: center;

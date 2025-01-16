@@ -41,6 +41,7 @@ export default {
                 case '/projects': return 'Projects';
                 case '/sandbox': return 'Sandbox';
                 case '/catwalk': return 'Catwalk';
+                case '/three' :return 'Three JS Examples'
                 default: 'Loading'
             }
         });

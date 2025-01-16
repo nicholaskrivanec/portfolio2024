@@ -29,7 +29,9 @@
     white-space: nowrap;
     text-overflow: clip;
 }
-
+.nav-btn{
+    display:inline-block;
+}
 .nav-btn a{
   position:relative;
   margin-bottom: 0px;

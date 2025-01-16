@@ -251,20 +251,19 @@ export default {
       resizeCanvas();
 
       if (canvas1.value) {
-        canvas1.value.addEventListener("mousemove", onMouseMove);
+        canvas1.value.addEventListener("pointermove", onMouseMove);
         canvas1.value.addEventListener("mouseleave", onMouseLeave);
         canvas1.value.addEventListener("mousedown", onMouseDown);
         canvas1.value.addEventListener("mouseup", onMouseUp);
+        canvas1.value.addEventListener('contextmenu', contextMenu, {passive: false});
         canvas1.value.addEventListener('wheel', preventZoom, {passive: false});
-        canvas1.value.addEventListener('contextmenu', contextMenu);
-      }
-      if (canvas2.value) {
-        canvas2.value.addEventListener("mousemove", onMouseMove);
+      } if (canvas2.value) {
+        canvas2.value.addEventListener("pointermove", onMouseMove);
         canvas2.value.addEventListener("mouseleave", onMouseLeave);
         canvas2.value.addEventListener("mousedown", onMouseDown);
         canvas2.value.addEventListener("mouseup", onMouseUp);
-        canvas2.value.addEventListener('contextmenu', contextMenu);
-        canvas2.value.addEventListener('wheel', preventZoom, {passive: false});
+        canvas2.value.addEventListener('contextmenu', contextMenu, {passive: false});
+        canvas2.value.addEventListener('contextmenu', preventZoom, {passive: false});
       }
       window.addEventListener("resize", resizeCanvas); 
       render();

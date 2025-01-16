@@ -133,26 +133,37 @@ export default {
   },
 };
 </script>
+<style>
 
-<style scoped>
-
-.github-viewer {
-    text-align: center;
-    min-height: calc(100vh - 165px);
-    margin: 20px auto;
-    max-width: 1168px;
+summary:hover h5 svg.svg-inline--fa.fa-caret-right.fa-fw.margin-right,
+summary:hover h5 svg.svg-inline--fa.fa-caret-down.fa-fw.margin-right ,
+details:hover h5 svg.svg-inline--fa.fa-caret-right.fa-fw.margin-right,
+details:hover h5 svg.svg-inline--fa.fa-caret-down.fa-fw.margin-right {
+  color: var(--hover-text);
 }
+
+.projects .code-icons span.tooltip{
+  width: 30px;
+  height: 30px;
+  background-size:30px;
+  margin-top: 0;
+  position: relative;
+  top: 2px;
+}
+
+
 
 .profile-section {
     margin: 20px 0;
     text-align: center;
 }
 
-.user-avatar {
-    width: 100px;
-    height: 100px;
+.user-avatar{
+    width: 124px;
+    height: 124px;
     border-radius: 50%;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+    -webkit-user-drag: none;
 }
 
 a.tooltip {
@@ -190,22 +201,8 @@ a.tooltip:hover {
 input[type=text] {
     display: inline-block;
     width: 300px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    outline: none;
     padding: 8px 10px;
     margin: 16px 8px;
-    border-radius: 4px;
-    text-align: center;
-    transition: all .3s ease;
-    background-color: var(--download-btn);
-    border: 2px solid var(--download-btn-text);
-    color: var(--download-btn-text);
-    font-size: 16px;
-}
-
-input[type=text]:focus {
-    border: 2px solid #555;
 }
 
 button {
@@ -216,11 +213,12 @@ button {
     border-radius: 4px;
     text-align: center;
     transition: all .3s ease;
-    background-color: var(--download-btn);
-    border: 2px solid var(--download-btn-text);
-    color: var(--download-btn-text);
+    background-color: var(--input-textbox);
+    border: 2px solid var(--input-border);
+    color: var(--input-text);
     cursor: pointer;
     font-size: 16px;
+    box-shadow: inset 0 0 9px 4px var(--box-shadow-light), inset 0px 0px 2px 0px var(--box-shadow-light2);
 }
 
 button:hover {

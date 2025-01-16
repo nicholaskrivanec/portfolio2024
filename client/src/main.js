@@ -12,24 +12,16 @@ app.use(pinia);
     import './assets/main.css';
     import './assets/icons.css';
 
+
 //Components
     import NavButton from './components/NavButton.vue';
     app.component('nav-button', NavButton);
 
-    import DetailRow from './components/DetailRow.vue';
-    app.component('detail-row', DetailRow);
-
     import MenuBar from './components/MenuBar.vue';
     app.component('menu-bar', MenuBar);
 
-    import NavBar from './components/NavBar.vue';
-    app.component('nav-bar', NavBar);
-
     import ToggleSwitch from './components/ToggleSwitch.vue';
     app.component('toggle-switch', ToggleSwitch);
-
-    import ColorPicker from './components/ColorPicker.vue';
-    app.component('color-picker', ColorPicker);
 
     import FooterArea from './components/FooterArea.vue';
     app.component('footer-area', FooterArea);
@@ -45,24 +37,15 @@ app.use(pinia);
 
     import About from './components/About.vue';
     app.component('about', About);
-    
-    import Grid from './components/Grid.vue';
-    app.component('grid', Grid);
 
-    import Record from './components/Record.vue';
-    app.component('record', Record);
-
-    import RecordRow from './components/RecordRow.vue';
-    app.component('record-row', RecordRow);
-
-    import RecordTable from './components/RecordTable.vue';
-    app.component('record-table', RecordTable);
-    
-    import CatWalk from './components/CatWalk.vue';
-    app.component('cat-walk', CatWalk);
+    import DetailRow from './components/DetailRow.vue';
+    app.component('detail-row', DetailRow);
 
     import DetailRows from './components/DetailRows.vue';
     app.component('detail-rows', DetailRows);
+
+    import ThreeRenderer from './components/ThreeRenderer.vue';
+    app.component('three-renderer', ThreeRenderer);
 
 //Font Awesome Icons
     import { library } from '@fortawesome/fontawesome-svg-core';

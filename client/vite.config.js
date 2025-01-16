@@ -1,32 +1,39 @@
-import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-
-const isDev = process.env.VITE_DEV === 'true';
+import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
-  base: './', 
+  base: './',
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-      ,'vue$': 'vue/dist/vue.runtime.esm.js'// prevents cross site scripting 
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      'vue$': 'vue/dist/vue.runtime.esm.js', // Prevents cross-site scripting
+      'three/examples/jsm': fileURLToPath(
+        new URL('../node_modules/three/examples/jsm', import.meta.url) // Updated path to project root
+      ),
+    },
   },
-  server: isDev ? {
-        host: '0.0.0.0',
-        port: 3000,
-        strictPort: true,
-        hmr: {
-          timeout: 10000
-        }
-      } : undefined,
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+    strictPort: true,
+    hmr: {
+      timeout: 10000,
+    },
+  },
   build: {
-    outDir: isDev ? 'dist-dev' : '../dist',// Separate output for local builds
-    chunkSizeWarningLimit: 2000, // Increase the size to match your needs
+    outDir: '../dist', // Use correct relative path for build output
+    chunkSizeWarningLimit: 2000, // Adjust as needed
+    rollupOptions: {
+      external: [], // Ensure no externalization for proper bundling
+    },
   },
-  watch: {
-    ignored: ['**/.npm/**', '**/node_modules/**']
-  }
+  optimizeDeps: {
+    include: [
+      'three',
+      'three/examples/jsm/geometries/TorusKnotGeometry.js',
+      'three/examples/jsm/controls/OrbitControls.js',
+    ],
+  },
 });
-
