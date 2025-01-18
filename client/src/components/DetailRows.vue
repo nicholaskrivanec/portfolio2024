@@ -204,4 +204,12 @@ details.container[open]:hover summary {
     color: var(--hover-text);
 }
 
+ .about details:hover .details,
+ .about details:hover .col-1,
+ .about details:hover .col-2,
+ .about details:hover .col-3
+ {
+    opacity:1;
+}
+
 </style>

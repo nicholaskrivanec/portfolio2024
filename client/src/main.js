@@ -11,6 +11,8 @@ app.use(pinia);
 //Assets
     import './assets/main.css';
     import './assets/icons.css';
+    import 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css';
+
 
 
 //Components
