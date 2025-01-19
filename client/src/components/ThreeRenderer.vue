@@ -18,33 +18,65 @@ export default {
   },
   setup(props) {
     const canvas = ref(null);
+    let scene, camera, renderer, controls;
+
+    const resetScene = () => {
+      // Dispose of scene objects
+      if (scene) {
+        while (scene.children.length > 0) {
+          const child = scene.children[0];
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach((mat) => mat.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+          scene.remove(child);
+        }
+      }
+
+      // Dispose of controls
+      if (controls) {
+        controls.dispose();
+        controls = null;
+      }
+    };
 
     const initializeScene = () => {
-      const renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true });
-      renderer.setSize(canvas.value.clientWidth, canvas.value.clientHeight, false);
+      // If already initialized, reset before reinitializing
+      resetScene();
+
+      // Create a renderer
+      if (!renderer) {
+        renderer = new THREE.WebGLRenderer({ canvas: canvas.value, antialias: true });
+        renderer.setSize(canvas.value.clientWidth, canvas.value.clientHeight, false);
+      }
+
+      // Camera setup
       const fov = 45;
       const aspect = canvas.value.clientWidth / canvas.value.clientHeight;
       const near = 0.1;
       const far = 100;
-      const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+      camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
       camera.position.set(0, 10, 20);
-      const scene = new THREE.Scene();
+
+      // Scene setup
+      scene = new THREE.Scene();
       scene.background = new THREE.Color('black');
 
-      // OrbitControls are now properly handled
-      const controls = new OrbitControls(camera, renderer.domElement);
+      // OrbitControls setup
+      controls = new OrbitControls(camera, renderer.domElement);
       controls.target.set(0, 5, 0);
       controls.update();
 
-      // Clear existing scene objects
-      while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
-      }
-
-      // Initialize the example
+      // Initialize the selected example
       const example = exampleList[props.example];
       if (example && example.init) {
-        example.init(scene, camera, renderer); // Pass renderer to the example
+        example.init(scene, camera, renderer, (error) => console.error(error));
+      } else {
+        console.error(`Example ${props.example} not found.`);
       }
 
       const resizeRendererToDisplaySize = () => {
@@ -72,7 +104,7 @@ export default {
     watch(
       () => props.example,
       () => {
-        initializeScene();
+        initializeScene(); // Reinitialize the scene when the example changes
       }
     );
 

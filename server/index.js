@@ -13,7 +13,10 @@ app.use((req, res, next) => {
   if (req.url === '/favicon.ico' || req.url.includes('profilepic')) {
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
   }
-  if (req.url.endsWith('.glb')) {
+  if (req.url.endsWith('.js')) {
+    res.setHeader('Content-Type', 'application/javascript');
+  }
+  else if (req.url.endsWith('.glb')) {
     res.setHeader('Content-Type', 'model/gltf-binary');
     res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
   }
@@ -36,6 +39,7 @@ if (process.env.NODE_ENV === 'development') {
   // Proxy frontend requests to Vite dev server
   app.use(
     '/',
+    '/assets',
     createProxyMiddleware({
       target: 'http://localhost:3000', // Vite dev server
       changeOrigin: true,
@@ -49,7 +53,7 @@ if (process.env.NODE_ENV === 'development') {
 
   // Serve production build
   const clientApp = express();
-  clientApp.use(express.static('dist'));
+  clientApp.use(express.static(path.join(__dirname, '../dist')));
   clientApp.use(express.json());
 
   clientApp.get('*', (req, res) => {

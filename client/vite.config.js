@@ -8,10 +8,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
-      'vue$': 'vue/dist/vue.runtime.esm.js', // Prevents cross-site scripting
-      'three/examples/jsm': fileURLToPath(
-        new URL('../node_modules/three/examples/jsm', import.meta.url) // Updated path to project root
-      ),
+      'vue$': 'vue/dist/vue.runtime.esm.js', // Prevent cross-site scripting
+      three: 'three',
+      orbit: 'three/examples/jsm/controls/OrbitControls.js'
     },
   },
   server: {
@@ -23,17 +22,15 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../dist', // Use correct relative path for build output
-    chunkSizeWarningLimit: 2000, // Adjust as needed
+    outDir: '../dist', 
+    chunkSizeWarningLimit: 2000, 
     rollupOptions: {
       external: [], // Ensure no externalization for proper bundling
     },
   },
   optimizeDeps: {
-    include: [
-      'three',
-      'three/examples/jsm/geometries/TorusKnotGeometry.js',
-      'three/examples/jsm/controls/OrbitControls.js',
-    ],
-  },
+    include: ['three', 'three/examples/jsm/controls/OrbitControls.js'],
+    exclude: ['three/examples/jsm/libs/lil-gui.module.min.js'] // If not needed
+  }
+  
 });

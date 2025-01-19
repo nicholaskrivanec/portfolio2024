@@ -8,7 +8,7 @@
   </template>
   
   <script>
-  import { ref, onMounted, emit } from 'vue';
+  import { ref, onMounted } from 'vue';
   import { exampleList } from '../utils/exampleMapping.js';
   
   export default {
