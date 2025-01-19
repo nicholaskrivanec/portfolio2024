@@ -7,14 +7,20 @@
     </transition>
 
     <div class="scrollbar-y body-scroll-area" v-show="!isLoading">
-      <menu-bar :includeIconSwitch="includeIconSwitch" :includeColorSwitch="includeColorSwitch"
-        @toggle-icons="toggleIcons" @toggle-colors="toggleColors" :showTitleArea="showTitleArea" :id="menu" />
+      <menu-bar 
+        :includeIconSwitch="includeIconSwitch" 
+        :includeColorSwitch="includeColorSwitch"
+        @toggle-icons="toggleIcons" 
+        @toggle-colors="toggleColors" 
+        :showTitleArea="showTitleArea" 
+        :id="menu" 
+      />
 
-      <router-view @view-loaded="handleViewLoaded" v-slot="{ Component, route }">
-        <keep-alive :include="cachedComponents">
-          <component :is="Component" :key="route.fullPath" :id="main" />
-        </keep-alive>
-      </router-view>
+      <keep-alive>
+        <router-view @view-loaded="handleViewLoaded" v-slot="{ Component, route }">
+          <component :is="Component" :key="route.fullPath" />
+        </router-view>
+      </keep-alive>
       
       <footer-area />
     </div>
@@ -39,16 +45,10 @@ export default {
     const from = ref('/');
     const to = ref('/');
 
-    const cachedComponents = computed(() =>
-      router.getRoutes()
-        .filter(route => route.meta.keepAlive)
-        .map(route => route.name)
-    );
-
+    // Function to handle loading state when switching views
     const handleViewLoaded = () => {
       setTimeout(() => {
         loadingStore.stopLoading();
-        isLoading.value = false;
       }, 700);
     };
 
@@ -57,7 +57,7 @@ export default {
       to.value = newPath;
 
       loadingStore.startLoading();
-      isLoading.value = true;
+
       switch (route.path) {
         case '/':
           showTitleArea.value = true;
@@ -91,20 +91,17 @@ export default {
       const userAgentCheck = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       const touchCheck = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
       const widthCheck = window.innerWidth <= 768;
-
       return userAgentCheck || touchCheck || widthCheck;
     });
 
     onMounted(() => {
       loadingStore.startLoading();
-      isLoading.value = true;
     });
 
     return {
       includeIconSwitch,
       includeColorSwitch,
       isLoading,
-      cachedComponents,
       handleViewLoaded,
       showTitleArea,
       path,
@@ -219,17 +216,17 @@ body.no-scroll {
 }
 
 .preload {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--preload-background);
-    z-index: 9999;
-    overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--preload-background);
+  z-index: 9999;
+  overflow: hidden;
 }
 
 .spin {

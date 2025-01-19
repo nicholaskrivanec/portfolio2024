@@ -20,7 +20,7 @@ const routes = [
     path: '/three',
     name: 'three',
     component: () => import('../views/Three.vue'),
-    meta: { keepAlive: false },
+    meta: { keepAlive: true },
   }
 ];
 const router = createRouter({

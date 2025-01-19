@@ -12,9 +12,13 @@ app.use(pinia);
     import './assets/main.css';
     import './assets/icons.css';
 
-
-
 //Components
+    import Preloader from './components/Preloader.vue';
+    app.component('preloader', Preloader);
+
+    import Dots from './components/Dots.vue';
+    app.component('dots', Dots);
+
     import NavButton from './components/NavButton.vue';
     app.component('nav-button', NavButton);
 
@@ -27,23 +31,14 @@ app.use(pinia);
     import FooterArea from './components/FooterArea.vue';
     app.component('footer-area', FooterArea);
 
-    import ChessPreloader from './components/ChessPreloader.vue';
-    app.component('chess-preloader', ChessPreloader);
-
-    import Dots from './components/Dots.vue';
-    app.component('dots', Dots);
-
-    import Preloader from './components/Preloader.vue';
-    app.component('preloader', Preloader);
-
-    import About from './components/About.vue';
-    app.component('about', About);
-
     import DetailRow from './components/DetailRow.vue';
     app.component('detail-row', DetailRow);
 
     import DetailRows from './components/DetailRows.vue';
     app.component('detail-rows', DetailRows);
+
+    import About from './components/About.vue';
+    app.component('about', About);
 
     import ThreeRenderer from './components/ThreeRenderer.vue';
     app.component('three-renderer', ThreeRenderer);

@@ -4,30 +4,30 @@ const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const app = express();
 const port = process.env.PORT || 3001;
-
+ 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Set cache headers for favicon.ico and profilepic
+
+// Set cache headers for static assets to avoid unnecessary reloads
 app.use((req, res, next) => {
-  if (req.url === '/favicon.ico' || req.url.includes('profilepic')) {
-    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-  }
-  if (req.url.endsWith('.js')) {
+  if (req.url.match(/\.(ico|png|svg|glb)$/)) 
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  if (req.url.endsWith('.js')) 
     res.setHeader('Content-Type', 'application/javascript');
-  }
-  else if (req.url.endsWith('.glb')) {
+  if (req.url.endsWith('.glb')) 
     res.setHeader('Content-Type', 'model/gltf-binary');
-    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-  }
+
   next();
 });
+
+
 
 // API Routes
 app.get('/ping', async (req, res) => {
   return res.status(200).send({ ping: true });
 });
-
+console.log(process.env.PORT)
 if (process.env.NODE_ENV === 'development') {
   console.log("Development mode: Proxying to Vite dev server");
 
@@ -39,29 +39,39 @@ if (process.env.NODE_ENV === 'development') {
   // Proxy frontend requests to Vite dev server
   app.use(
     '/',
-    '/assets',
     createProxyMiddleware({
-      target: 'http://localhost:3000', // Vite dev server
+      target: 'http://localhost:3000', 
       changeOrigin: true,
-      ws: true, // Enable WebSocket proxying for HMR
-      logLevel: 'debug' // Useful for debugging
+      ws: true, 
+      logLevel: 'debug',
+      onProxyReq: (proxyReq, req, res) => {
+        console.log(`Proxying request to: http://localhost:3000${req.url}`);
+      },
+      onError: (err, req, res) => {
+        console.error('Proxy error:', err.message);
+        res.status(500).send('Proxy server error');
+      }
     })
   );
-}
- else {
+} else {
   console.log("Production mode: Serving static files");
 
-  // Serve production build
-  const clientApp = express();
-  clientApp.use(express.static(path.join(__dirname, '../dist')));
-  clientApp.use(express.json());
+  // Serve production build with caching improvements
+  app.use(express.static(path.join(__dirname, '../dist'), {
+    maxAge: '1y', // Cache for 1 year
+    etag: false,  // Disable ETag to avoid revalidation
+    immutable: true  // Instruct the browser that files won't change
+  }));
 
-  clientApp.get('*', (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
   });
-  clientApp.listen(3000, () => console.log('Client listening on port 3000'));
+
+  // Production server listening on port 3000
+  app.listen(3000, () => console.log('Client listening on port 3000'));
 }
 
+// Start the backend server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

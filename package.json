@@ -4,9 +4,10 @@
   "scripts": {
     "build": "vite build client --emptyOutDir",
     "start": "vite build client --emptyOutDir && node server/index.js --emptyOutDir",
+    "dev": "concurrently --kill-others \"vite --port 3000\" \"npm run vite --port 3000\" \"npm run dev-server\"",
     "dev-server": "nodemon server/index.js",
-    "dev": "concurrently --kill-others && npm run dev-server && npm run vite",
-    "vite": "vite"
+    "vite": "vite",
+    "preview": "vite preview --outDir dist --port 5000"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.1",
@@ -33,6 +34,6 @@
     "@types/three": "^0.172.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "concurrently": "^9.1.0",
-    "vite": "^4.0.0"
+    "vite": "^4.5.5"
   }
 }
