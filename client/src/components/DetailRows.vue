@@ -10,9 +10,9 @@
           @click="toggleAll"
         />
 
-        <span @click="setSort(0)">
+        <div @click="setSort(0)">
           {{ data.headers[0].value }}
-        </span>
+        </div>
       </h5>
       <h5
         v-for="(header, index) in data.headers.slice(1)"
@@ -154,12 +154,18 @@ details.container {
   margin: 0px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
 }
-
-
-.projects .header-row .col-1 span:hover, 
+.header-row .col-1 div {
+    display: inline-block;
+    width: calc(100% - 32px);
+}
+.about .header-row .col-2 {
+    margin: 5px 0 8px 0;
+    height: 24px;
+}
+.projects .header-row .col-1 div:hover, 
 .projects .header-row .col-2:hover, 
 .projects .header-row .col-3:hover, 
-.about .header-row .col-1 span:hover, 
+.about .header-row .col-1 div:hover, 
 .about .header-row .col-2:hover, 
 .about .header-row .col-3:hover {
     color: var(--hover-text);

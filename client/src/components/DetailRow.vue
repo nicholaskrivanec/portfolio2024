@@ -7,14 +7,14 @@
                 {{ cols[0]?.value }}
             </h5>
             <span v-for="(col, index) in cols.slice(1)" :key="index" :class="col.class">
-                <fa-icon v-show="col.icon" :icon="[col.icon]" />
+                <fa-icon v-if="col.icon" :icon="[col.icon]" />
                 <span v-if="col.html" v-html="col.html"></span>
                 <span v-else>{{ col.value }}</span>
             </span>
         </summary>
         <div class="detail-values">
             <div v-for="(detail, index) in details" :key="index" :class="[detail.class]">
-                <div v-show="detail.icon"><fa-icon :icon="[detail.icon]" /></div>
+                <div v-if="detail.icon"><fa-icon :icon="[detail.icon]" /></div>
                 <div v-if="detail.html" v-html="detail.html"></div>
                 <div v-else>{{ detail.value }}</div>
             </div>
