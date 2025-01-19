@@ -4,8 +4,19 @@
       <section class="third">
         <div class="card-2">
           <div class="display-container" ref="displayContainer">
-            <img class="profile-pic" @load="updateHeights" :src="profilePic" alt="Profile Picture" width="100%"
-              height="auto" />
+            <transition-group name="fade" tag="div" class="image-wrapper">
+              <img 
+                v-for="(pic, index) in profilePics" 
+                :key="index" 
+                :src="pic" 
+                alt="Profile Picture" 
+                width="100%"
+                height="100%" 
+                class="profile-pic"
+                :class="{ active: index === currentIndex }"
+                @load="updateHeights"
+              />
+            </transition-group>
           </div>
           <div class="container" :style="{ height: thirdHeight }" ref="thirdSection">
             <h6 class="picture-title">{{ name }}</h6>
@@ -88,18 +99,22 @@
 <script>
 import { ref, computed, onMounted, onUnmounted, nextTick, watch, onActivated, onDeactivated } from "vue";
 import { storeToRefs } from "pinia";
-import { useLoadingStore } from "@/stores/loading";
 import { useUserStore } from "@/stores/userStore";
+import { useLoadingStore } from "@/stores/loading";
 import { useEventStore } from "@/stores/eventStore";
 
 export default {
   name: "About",
   setup() {
-    const eventStore = useEventStore();
     const ds = useUserStore();
     const loadingStore = useLoadingStore();
+    const eventStore = useEventStore();
     const { isLoading } = storeToRefs(loadingStore);
-    const { name, location, email, expertSkills, proficientSkills, profilePic } = storeToRefs(ds);
+    const { name, location, email, expertSkills, proficientSkills, profilePics } = storeToRefs(ds);
+
+    const currentIndex = ref(0);
+
+    let interval = null;
 
     const thirdHeight = computed(() => {
       return (winWidth.value > 601)
@@ -124,6 +139,16 @@ export default {
     };
 
     onMounted(() => {
+      if (profilePics.value && profilePics.value.length > 0) {
+        let x = profilePics.value.length;
+        currentIndex.value = 0;
+        
+        interval = setInterval(() => {
+          currentIndex.value = (currentIndex.value + 1) % x;
+        }, 8000);
+      } else {
+        console.warn("Profile pictures not loaded yet.");
+      }
       watch(
         () => eventStore.events["toggle-icons"],
         (newValue) => {
@@ -143,6 +168,7 @@ export default {
     });
 
     onUnmounted(() => {
+      clearInterval(interval);
       window.removeEventListener("resize", updateHeights);
     });
 
@@ -159,7 +185,8 @@ export default {
 
 
     return {
-      profilePic,
+      profilePics,
+      currentIndex,
       name,
       location,
       email,
@@ -179,18 +206,6 @@ export default {
         rows: [
           {
             cols: [
-              { value: 'Annotation Specialist', class: 'col-1', icon: null, html: null },
-              { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
-              { value: 'current', class: 'col-3', icon: 'fa-calendar-days', html: null }
-            ],
-            details: [
-              { value: 'DataAnnotation',  class: 'col-2', icon:null, html: null },
-              { value: 'Trained and assisted AI models in coding, cataloging and evaluating over 50,000 lines of code and text data to reduce generation errors across Python, C#, Java, and JavaScript models.', class: 'details', icon:null, html: null  }
-            ],
-            isExpanded: false,
-            onToggle: updateHeights
-          }, {
-            cols: [
               { value: 'Web Developer III', class: 'col-1', icon: null, html: null },
               { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
               { value: '2019 - 2024', class: 'col-3', icon: 'fa-calendar-days', html: null }
@@ -203,8 +218,32 @@ export default {
             onToggle: updateHeights
           }, {
             cols: [
+              { value: 'Annotation Specialist', class: 'col-1', icon: null, html: null },
+              { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
+              { value: '2024 - present', class: 'col-3', icon: 'fa-calendar-days', html: null }
+            ],
+            details: [
+              { value: 'DataAnnotation',  class: 'col-2', icon:null, html: null },
+              { value: 'Trained and assisted AI models in coding, cataloging and evaluating over 50,000 lines of code and text data to reduce generation errors across Python, C#, Java, and JavaScript models.', class: 'details', icon:null, html: null  }
+            ],
+            isExpanded: false,
+            onToggle: updateHeights
+          }, {
+            cols: [
+              { value: 'Cello Instructor', class: 'col-1', icon: null, html: null },
+              { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
+              { value: '2011 - present', class: 'col-3', icon: 'fa-calendar-days', html: null }
+            ],
+            details: [
+              { value: '',  class: 'col-2', icon:null, html: null },
+              { value: 'Mentoring private cellists ranging from beginner to college levels enabling some to earn scholarships paying 100% of their college tuition.', class: 'details', icon:null, html: null  }
+            ],
+            isExpanded: false,
+            onToggle: updateHeights
+          }, {
+            cols: [
               { value: 'Test Administrator', class: 'col-1', icon: null, html: null },
-              { value: ' ', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
+              { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
               { value: '2018 - 2019', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [
@@ -227,8 +266,8 @@ export default {
             onToggle: updateHeights
           }
         ]
-      }
-      , education: {
+      },
+      education: {
         headers: [
           { value: 'School', class: 'col-1', icon: null, html: null },
           { value: '', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
@@ -237,24 +276,23 @@ export default {
         rows: [
           {
             cols: [
-              {
-                value: 'Weber State University', class: 'col-1', icon: null, html: `<svg class="wsulogo" version="1.1" xmlns="http://www.w3.org/2000/svg" 
-                    width="40px" height="22px" viewBox="0 0 54.9 76.7" xml:space="preserve">
-                    <path fill="#4A0D66" d="M54.9,20.8V0H0v21c0,39.5,27.4,55.7,27.4,55.7l0,0c0,0,27.6-15.2,27.4-55.8V20.8z" />
-                    <path fill="#FFFFFF" d="M39.6,17.4c-3.9-5.1-3.2-7.4-3.2-7.4s-2.1,3.7-3.1,6.8c-1.3,3.7,1.2,7.6,1.2,7.6l4.3,6.2
-                    c1.6,2.6-2.4,8.6-2.4,8.6l-8.8-20.5C23.9,10.2,26.1,7,26.1,7c-7.3,7.7-6.3,12.5-5.2,15.9c0,0,1.6,4,3.7,9.1l-2.8,7.4L16,25.9
-                    c-2-5.1,0.1-8.6,0.1-8.6c-9.2,8-5.8,16.2-4,20.4c3.9,9.5,6.5,15.5,7.1,17.1c0.1,0.4,0.2,0.6,0.2,0.6h1.7c0.1,0,0.3-0.1,0.4-0.2
-                    c0.1-0.1,0.7-2,0.7-2l4.6-15.6c3,7.5,6.8,16.7,7,17.3c0.1,0.3,0.2,0.5,0.2,0.5c0,0,1.7,0,1.7,0c0.1,0,0.2-0.1,0.3-0.2
-                    c0.1-0.2,0.7-2,0.7-2l6.8-19.5C46.9,25.1,42.7,21.5,39.6,17.4z" />
-                    </svg>`},
+            { value: 'Weber State University', class: 'col-1', icon: null, html: `<svg class="wsulogo" version="1.1" xmlns="http://www.w3.org/2000/svg" width="40px" height="22px" viewBox="0 0 54.9 76.7" xml:space="preserve"><path fill="#4A0D66" d="M54.9,20.8V0H0v21c0,39.5,27.4,55.7,27.4,55.7l0,0c0,0,27.6-15.2,27.4-55.8V20.8z" /><path fill="#FFFFFF" d="M39.6,17.4c-3.9-5.1-3.2-7.4-3.2-7.4s-2.1,3.7-3.1,6.8c-1.3,3.7,1.2,7.6,1.2,7.6l4.3,6.2c1.6,2.6-2.4,8.6-2.4,8.6l-8.8-20.5C23.9,10.2,26.1,7,26.1,7c-7.3,7.7-6.3,12.5-5.2,15.9c0,0,1.6,4,3.7,9.1l-2.8,7.4L16,25.9c-2-5.1,0.1-8.6,0.1-8.6c-9.2,8-5.8,16.2-4,20.4c3.9,9.5,6.5,15.5,7.1,17.1c0.1,0.4,0.2,0.6,0.2,0.6h1.7c0.1,0,0.3-0.1,0.4-0.2c0.1-0.1,0.7-2,0.7-2l4.6-15.6c3,7.5,6.8,16.7,7,17.3c0.1,0.3,0.2,0.5,0.2,0.5c0,0,1.7,0,1.7,0c0.1,0,0.2-0.1,0.3-0.2c0.1-0.2,0.7-2,0.7-2l6.8-19.5C46.9,25.1,42.7,21.5,39.6,17.4z" /></svg>`},
+            { value:'', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
+              { value:'2025 - present', class: 'col-3', icon: 'fa-calendar-days', html: null }
+            ],
+            details: [{ value: 'Bachelors of Science, Computer Science (In Progress)', class: 'details', icon: null, html: null }],
+            isExpanded: false,
+            onToggle: updateHeights
+          },{
+            cols: [
+              { value: 'Weber State University', class: 'col-1', icon: null, html: `<svg class="wsulogo" version="1.1" xmlns="http://www.w3.org/2000/svg" width="40px" height="22px" viewBox="0 0 54.9 76.7" xml:space="preserve"><path fill="#4A0D66" d="M54.9,20.8V0H0v21c0,39.5,27.4,55.7,27.4,55.7l0,0c0,0,27.6-15.2,27.4-55.8V20.8z" /><path fill="#FFFFFF" d="M39.6,17.4c-3.9-5.1-3.2-7.4-3.2-7.4s-2.1,3.7-3.1,6.8c-1.3,3.7,1.2,7.6,1.2,7.6l4.3,6.2c1.6,2.6-2.4,8.6-2.4,8.6l-8.8-20.5C23.9,10.2,26.1,7,26.1,7c-7.3,7.7-6.3,12.5-5.2,15.9c0,0,1.6,4,3.7,9.1l-2.8,7.4L16,25.9c-2-5.1,0.1-8.6,0.1-8.6c-9.2,8-5.8,16.2-4,20.4c3.9,9.5,6.5,15.5,7.1,17.1c0.1,0.4,0.2,0.6,0.2,0.6h1.7c0.1,0,0.3-0.1,0.4-0.2c0.1-0.1,0.7-2,0.7-2l4.6-15.6c3,7.5,6.8,16.7,7,17.3c0.1,0.3,0.2,0.5,0.2,0.5c0,0,1.7,0,1.7,0c0.1,0,0.2-0.1,0.3-0.2c0.1-0.2,0.7-2,0.7-2l6.8-19.5C46.9,25.1,42.7,21.5,39.6,17.4z" /></svg>`},
               { value:'', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
               { value:'2015 - 2019', class: 'col-3', icon: 'fa-calendar-days', html: null }
             ],
             details: [{ value: 'Associate of Science, Computer Science', class: 'details', icon: null, html: null }],
             isExpanded: false,
             onToggle: updateHeights
-          },
-          {
+          },{
             cols: [
               { value: 'Woods Cross High', class: 'col-1', icon: null, html: null },
               { value:'', class: 'col-2', icon: null, html: `<span>&nbsp;<span>` },
@@ -273,6 +311,7 @@ export default {
 </script>
 
 <style scoped>
+
 .wsulogo {
   vertical-align: middle;
 }
@@ -285,5 +324,52 @@ export default {
 .container.card.details .header-icon {
     color: var(--icon-header-text);
     padding-left: 8px;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.display-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Maintain square aspect ratio */
+  overflow: hidden;
+}
+
+.image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.profile-pic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.profile-pic.active {
+  opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s ease-in-out;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
 }
 </style>
